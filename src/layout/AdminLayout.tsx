@@ -8,7 +8,6 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   Search,
-  Settings2,
 } from 'lucide-react'
 
 import { adminMenu } from '@/layout/adminMenu'
@@ -131,7 +130,7 @@ export function AdminLayout() {
 
       <motion.aside
         className={cn(
-          'fixed inset-y-0 left-0 z-50 border-r border-black/10 bg-[#faf9f7] shadow-sm',
+          'fixed inset-y-0 left-0 z-50 h-screen border-r border-black/10 bg-[#faf9f7] shadow-sm flex flex-col overflow-hidden',
           'supports-[backdrop-filter]:bg-[#faf9f7]/90 supports-[backdrop-filter]:backdrop-blur',
         )}
         animate={{
@@ -140,7 +139,7 @@ export function AdminLayout() {
         }}
         transition={{ type: 'spring', stiffness: 260, damping: 30 }}
       >
-        <div className="flex h-16 items-center justify-between px-4">
+        <div className="flex h-16 flex-shrink-0 items-center justify-between px-4">
           <motion.div
             whileHover={{ scale: 1.02 }}
             className={cn('flex items-center gap-3', collapsed && !isMobile && 'justify-center')}
@@ -181,199 +180,237 @@ export function AdminLayout() {
           </Button>
         </div>
 
-        <nav className="px-3 py-2">
-          <div className="space-y-5">
-            {(
-              [
-                { label: 'MAIN', items: sectionedMenu.main },
-                { label: 'MANAGEMENT', items: sectionedMenu.management },
-                { label: 'SYSTEM', items: sectionedMenu.system },
-              ] as const
-            ).map((section) => (
-              <div key={section.label} className="space-y-2">
-                {(!collapsed || isMobile) && (
-                  <div className="px-3 text-[11px] font-medium tracking-wider text-muted-foreground">
-                    {section.label}
+        <div className="flex-1 overflow-y-auto overflow-x-hidden sidebar-scroll">
+          <nav className="px-3 py-2">
+            <div className="space-y-5">
+              {(
+                [
+                  { label: 'MAIN', items: sectionedMenu.main },
+                  { label: 'MANAGEMENT', items: sectionedMenu.management },
+                  { label: 'SYSTEM', items: sectionedMenu.system },
+                ] as const
+              ).map((section) => (
+                <div key={section.label} className="space-y-2">
+                  {(!collapsed || isMobile) && (
+                    <div className="px-3 text-[11px] font-medium tracking-wider text-muted-foreground">
+                      {section.label}
+                    </div>
+                  )}
+                  <div className="space-y-1">
+                    {section.items.map((item) => {
+                      const Icon = item.icon
+                      const showDot =
+                        (item.key === 'support' && unreadByKind.support) ||
+                        (item.key === 'orders' && unreadByKind.orders) ||
+                        (item.key === 'delivery' && unreadByKind.delivery)
+                      return (
+                        <NavLink
+                          key={item.key}
+                          to={item.to}
+                          onClick={() => isMobile && setMobileOpen(false)}
+                          className={({ isActive }) =>
+                            cn(
+                              'group relative flex items-center gap-3 rounded-xl border border-transparent px-3 py-2.5 text-sm font-medium tracking-tight text-muted-foreground transition-colors',
+                              'hover:bg-[#895129]/5 hover:text-[#895129]',
+                              isActive &&
+                                'bg-[#895129]/10 text-[#895129] border-[#895129]/20 shadow-[0_4px_12px_rgba(137,81,41,0.12)] font-semibold',
+                              collapsed && !isMobile && 'justify-center px-2',
+                            )
+                          }
+                          title={collapsed && !isMobile ? item.label : undefined}
+                        >
+                          {({ isActive }) => (
+                            <>
+                              {isActive && (
+                                <motion.span
+                                  layoutId="sidebar-active-indicator"
+                                  className="absolute left-0 top-1/2 h-6 w-1 -translate-y-1/2 rounded-full bg-[#895129]"
+                                />
+                              )}
+                              <motion.span whileHover={{ x: 4, scale: 1.01 }} className="flex items-center gap-3 group-hover:translate-x-1">
+                                <motion.span
+                                  whileHover={{ scale: 1.05 }}
+                                  className={cn(
+                                    'relative',
+                                    isActive ? 'text-[#895129]' : 'text-muted-foreground group-hover:text-[#895129]',
+                                  )}
+                                >
+                                  <Icon className="h-4 w-4" />
+                                  {showDot && (
+                                    <span className="absolute -right-1 -top-1 h-2 w-2 rounded-full bg-red-500 animate-pulse" />
+                                  )}
+                                </motion.span>
+                                {(!collapsed || isMobile) && <span>{item.label}</span>}
+                              </motion.span>
+                              <SidebarTooltip label={item.label} collapsed={collapsed && !isMobile} />
+                            </>
+                          )}
+                        </NavLink>
+                      )
+                    })}
                   </div>
-                )}
-                <div className="space-y-1">
-                  {section.items.map((item) => {
-                    const Icon = item.icon
-                    const showDot =
-                      (item.key === 'support' && unreadByKind.support) ||
-                      (item.key === 'orders' && unreadByKind.orders) ||
-                      (item.key === 'delivery' && unreadByKind.delivery)
-                    return (
-                      <NavLink
-                        key={item.key}
-                        to={item.to}
-                        onClick={() => isMobile && setMobileOpen(false)}
-                        className={({ isActive }) =>
-                          cn(
-                            'group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium tracking-tight text-muted-foreground transition-colors',
-                            'hover:bg-primary/5 hover:text-foreground',
-                            isActive && 'bg-primary/10 text-primary shadow-soft',
-                            collapsed && !isMobile && 'justify-center px-2',
-                          )
-                        }
-                        title={collapsed && !isMobile ? item.label : undefined}
-                      >
-                        {({ isActive }) => (
-                          <>
+                </div>
+              ))}
+
+              {/* Settings accordion */}
+              {sectionedMenu.settings && (
+                <div className="space-y-2">
+                  {(!collapsed || isMobile) && (
+                    <div className="px-3 text-[11px] font-medium tracking-wider text-muted-foreground">
+                      SETTINGS
+                    </div>
+                  )}
+                  <div className="space-y-1">
+                    {(() => {
+                      const item = sectionedMenu.settings
+                      const Icon = item.icon
+                      const isActive = location.pathname.startsWith('/settings')
+                      const open = settingsOpen && (!collapsed || isMobile)
+                      return (
+                        <div className="space-y-1">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const next = !settingsOpen
+                              setSettingsOpen(next)
+                              localStorage.setItem(SETTINGS_OPEN_KEY, next ? '1' : '0')
+                            }}
+                            className={cn(
+                              'group relative w-full flex items-center gap-3 rounded-xl border border-transparent px-3 py-2.5 text-sm font-medium tracking-tight text-muted-foreground transition-colors',
+                              'hover:bg-[#895129]/5 hover:text-[#895129]',
+                              isActive &&
+                                'bg-[#895129]/10 text-[#895129] border-[#895129]/20 shadow-[0_4px_12px_rgba(137,81,41,0.12)] font-semibold',
+                              collapsed && !isMobile && 'justify-center px-2',
+                            )}
+                            title={collapsed && !isMobile ? item.label : undefined}
+                            aria-expanded={open}
+                          >
                             {isActive && (
                               <motion.span
                                 layoutId="sidebar-active-indicator"
-                                className="absolute left-1 top-1/2 h-6 w-1 -translate-y-1/2 rounded-full bg-primary"
+                                className="absolute left-0 top-1/2 h-6 w-1 -translate-y-1/2 rounded-full bg-[#895129]"
                               />
                             )}
-                            <motion.span whileHover={{ x: 4, scale: 1.01 }} className="flex items-center gap-3">
-                              <motion.span whileHover={{ scale: 1.05 }} className="relative">
-                                <Icon className="h-4 w-4" />
-                                {showDot && (
-                                  <span className="absolute -right-1 -top-1 h-2 w-2 rounded-full bg-red-500 animate-pulse" />
-                                )}
-                              </motion.span>
-                              {(!collapsed || isMobile) && <span>{item.label}</span>}
+                          <motion.span whileHover={{ x: 4, scale: 1.01 }} className="flex items-center gap-3">
+                            <span
+                              className={cn(
+                                isActive ? 'text-[#895129]' : 'text-muted-foreground group-hover:text-[#895129]',
+                              )}
+                            >
+                              <Icon className="h-4 w-4" />
+                            </span>
+                              {(!collapsed || isMobile) && (
+                                <>
+                                  <span className="flex-1 text-left">{item.label}</span>
+                                <ChevronDown
+                                  className={cn(
+                                    'h-4 w-4 transition-transform',
+                                    open && 'rotate-180',
+                                    isActive && 'text-[#895129]',
+                                  )}
+                                />
+                                </>
+                              )}
                             </motion.span>
                             <SidebarTooltip label={item.label} collapsed={collapsed && !isMobile} />
-                          </>
-                        )}
-                      </NavLink>
-                    )
-                  })}
-                </div>
-              </div>
-            ))}
+                          </button>
 
-            {/* Settings accordion */}
-            {sectionedMenu.settings && (
-              <div className="space-y-2">
-                {(!collapsed || isMobile) && (
-                  <div className="px-3 text-[11px] font-medium tracking-wider text-muted-foreground">
-                    SETTINGS
-                  </div>
-                )}
-                <div className="space-y-1">
-                  {(() => {
-                    const item = sectionedMenu.settings
-                    const Icon = item.icon
-                    const isActive = location.pathname.startsWith('/settings')
-                    const open = settingsOpen && (!collapsed || isMobile)
-                    return (
-                      <div className="space-y-1">
-                        <button
-                          type="button"
-                          onClick={() => {
-                            const next = !settingsOpen
-                            setSettingsOpen(next)
-                            localStorage.setItem(SETTINGS_OPEN_KEY, next ? '1' : '0')
-                          }}
-                          className={cn(
-                            'group relative w-full flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium tracking-tight text-muted-foreground transition-colors',
-                            'hover:bg-primary/5 hover:text-foreground',
-                            isActive && 'bg-primary/10 text-primary shadow-soft',
-                            collapsed && !isMobile && 'justify-center px-2',
-                          )}
-                          title={collapsed && !isMobile ? item.label : undefined}
-                          aria-expanded={open}
-                        >
-                          {isActive && (
-                            <motion.span
-                              layoutId="sidebar-active-indicator"
-                              className="absolute left-1 top-1/2 h-6 w-1 -translate-y-1/2 rounded-full bg-primary"
-                            />
-                          )}
-                          <motion.span whileHover={{ x: 4, scale: 1.01 }} className="flex items-center gap-3">
-                            <Icon className="h-4 w-4" />
-                            {(!collapsed || isMobile) && (
-                              <>
-                                <span className="flex-1 text-left">{item.label}</span>
-                                <ChevronDown className={cn('h-4 w-4 transition-transform', open && 'rotate-180')} />
-                              </>
+                          <AnimatePresence initial={false}>
+                            {open && (!collapsed || isMobile) && (
+                              <motion.div
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: 'auto', opacity: 1 }}
+                                exit={{ height: 0, opacity: 0 }}
+                                transition={{ duration: 0.22, ease: 'easeOut' }}
+                                className="overflow-hidden"
+                              >
+                                <div className="space-y-1">
+                                  {item.children.map((child) => {
+                                    const ChildIcon = child.icon
+                                    const childActive = location.pathname === child.to
+                                    return (
+                                      <NavLink
+                                        key={child.key}
+                                        to={child.to}
+                                        onClick={() => isMobile && setMobileOpen(false)}
+                                        className={cn(
+                                          'group relative flex items-center gap-2 rounded-xl px-3 py-2 text-[13px] font-medium text-muted-foreground transition-colors pl-10',
+                                          'hover:bg-[#895129]/5 hover:text-[#895129]',
+                                          childActive && 'bg-[#895129]/10 text-[#895129] font-semibold',
+                                        )}
+                                      >
+                                        <span
+                                          className={cn(
+                                            'absolute left-6 top-1/2 h-1.5 w-1.5 -translate-y-1/2 rounded-full',
+                                            childActive ? 'bg-[#895129]' : 'bg-black/20 group-hover:bg-[#895129]',
+                                          )}
+                                        />
+                                        <span
+                                          className={cn(
+                                            childActive ? 'text-[#895129]' : 'text-muted-foreground group-hover:text-[#895129]',
+                                          )}
+                                        >
+                                          <ChildIcon className="h-4 w-4" />
+                                        </span>
+                                        <span>{child.label}</span>
+                                      </NavLink>
+                                    )
+                                  })}
+                                </div>
+                              </motion.div>
                             )}
-                          </motion.span>
-                          <SidebarTooltip label={item.label} collapsed={collapsed && !isMobile} />
-                        </button>
-
-                        <AnimatePresence initial={false}>
-                          {open && (!collapsed || isMobile) && (
-                            <motion.div
-                              initial={{ height: 0, opacity: 0 }}
-                              animate={{ height: 'auto', opacity: 1 }}
-                              exit={{ height: 0, opacity: 0 }}
-                              transition={{ duration: 0.22, ease: 'easeOut' }}
-                              className="overflow-hidden"
-                            >
-                              <div className="space-y-1">
-                                {item.children.map((child) => {
-                                  const ChildIcon = child.icon
-                                  const childActive = location.pathname === child.to
-                                  return (
-                                    <NavLink
-                                      key={child.key}
-                                      to={child.to}
-                                      onClick={() => isMobile && setMobileOpen(false)}
-                                      className={cn(
-                                        'group relative flex items-center gap-2 rounded-xl px-3 py-2 text-[13px] font-medium text-muted-foreground transition-colors pl-10',
-                                        'hover:bg-primary/5 hover:text-foreground',
-                                        childActive && 'bg-muted text-primary',
-                                      )}
-                                    >
-                                      <span className="absolute left-6 top-1/2 h-1.5 w-1.5 -translate-y-1/2 rounded-full bg-black/20 group-hover:bg-primary" />
-                                      <ChildIcon className="h-4 w-4" />
-                                      <span>{child.label}</span>
-                                    </NavLink>
-                                  )
-                                })}
-                              </div>
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
-                      </div>
-                    )
-                  })()}
-                </div>
-              </div>
-            )}
-          </div>
-        </nav>
-
-        {/* Bottom user card */}
-        <div className="mt-auto px-3 pb-3">
-          <motion.div whileHover={{ y: -1 }} className="rounded-2xl border border-black/10 bg-white/60 p-3 shadow-soft">
-            <div className={cn('flex items-center gap-3', collapsed && !isMobile && 'justify-center')}>
-              <Avatar className="h-9 w-9">
-                <AvatarFallback>AD</AvatarFallback>
-              </Avatar>
-              {(!collapsed || isMobile) && (
-                <div className="min-w-0">
-                  <div className="truncate text-sm font-semibold tracking-tight text-foreground">Admin</div>
-                  <div className="text-xs text-muted-foreground">Administrator</div>
+                          </AnimatePresence>
+                        </div>
+                      )
+                    })()}
+                  </div>
                 </div>
               )}
             </div>
-            {(!collapsed || isMobile) && (
-              <div className="mt-3 flex gap-2">
-                <Button asChild variant="outline" size="sm" className="flex-1">
-                  <NavLink to="/settings/profile">
-                    <Settings2 className="h-4 w-4" />
-                    Settings
-                  </NavLink>
-                </Button>
-                <Button
-                  variant="destructive"
-                  size="sm"
-                  className="flex-1"
-                  onClick={() => {
-                    localStorage.removeItem('admin_token')
-                    window.location.reload()
-                  }}
-                >
-                  <LogOut className="h-4 w-4" />
-                  Logout
-                </Button>
+          </nav>
+        </div>
+
+        {/* Bottom user card */}
+        <div className="flex-shrink-0 px-3 pb-3 pt-3 border-t border-black/10">
+          <motion.div
+            whileHover={{ y: -1 }}
+            className="rounded-2xl border border-black/10 bg-white/60 p-3 shadow-soft"
+          >
+            <div
+              className={cn(
+                'flex items-center justify-between gap-3',
+                collapsed && !isMobile && 'justify-center',
+              )}
+            >
+              <div className={cn('flex items-center gap-3', collapsed && !isMobile && 'justify-center')}>
+                <Avatar className="h-9 w-9">
+                  <AvatarFallback>AD</AvatarFallback>
+                </Avatar>
+                {(!collapsed || isMobile) && (
+                  <div className="min-w-0">
+                    <div className="truncate text-sm font-semibold tracking-tight text-foreground">Admin</div>
+                    <div className="text-xs text-muted-foreground">Administrator</div>
+                  </div>
+                )}
               </div>
-            )}
+
+              {(!collapsed || isMobile) && (
+                <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+                  <Button
+                    variant="destructive"
+                    size="sm"
+                    className="h-9 px-3"
+                    onClick={() => {
+                      localStorage.removeItem('admin_token')
+                      window.location.reload()
+                    }}
+                  >
+                    <LogOut className="h-4 w-4" />
+                    Logout
+                  </Button>
+                </motion.div>
+              )}
+            </div>
           </motion.div>
         </div>
       </motion.aside>

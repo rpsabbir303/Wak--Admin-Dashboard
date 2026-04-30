@@ -54,3 +54,31 @@ textarea:focus-visible {
   box-shadow: 0 0 0 3px rgba(137, 81, 41, 0.2);
 }
 
+/* Minimal sidebar scrollbar (thin + primary hover) */
+.sidebar-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(137, 81, 41, 0.3) transparent;
+  scroll-behavior: smooth;
+}
+
+.sidebar-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.sidebar-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar-scroll::-webkit-scrollbar-thumb {
+  background: rgba(137, 81, 41, 0.25);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+.sidebar-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(137, 81, 41, 0.45);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+

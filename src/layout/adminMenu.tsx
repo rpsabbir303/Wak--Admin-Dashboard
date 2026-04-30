@@ -7,7 +7,6 @@ import {
   Headphones,
   LayoutDashboard,
   Lock,
-  MessageCircle,
   Package,
   Settings,
   Truck,
@@ -51,7 +50,6 @@ export const adminMenu: AdminMenuItem[] = [
       { key: 'settings_profile', label: 'Profile', to: '/settings/profile', icon: User },
       { key: 'settings_security', label: 'Security', to: '/settings/security', icon: Lock },
       { key: 'settings_legal', label: 'Legal', to: '/settings/legal', icon: FileText },
-      { key: 'settings_support', label: 'Support', to: '/settings/support', icon: MessageCircle },
     ],
   },
 ]

@@ -157,7 +157,7 @@ type DashboardStatItem = {
 type DashboardQuickActionsItem = { kind: 'quick_actions' }
 
 export default function DashboardPage() {
-  const { data, isLoading, isError } = useGetDashboardStatsQuery()
+  const { data, isLoading } = useGetDashboardStatsQuery()
   const [approvedVendorIds, setApprovedVendorIds] = useState<Set<string>>(() => new Set())
 
   const safe: DashboardData = (data as DashboardData | undefined) ?? {
@@ -234,12 +234,6 @@ export default function DashboardPage() {
         </div>
       }
     >
-      {isError && (
-        <div className="rounded-lg border border-black/10 bg-white p-4 text-sm text-muted-foreground shadow-soft">
-          Using placeholder data (API not reachable).
-        </div>
-      )}
-
       <motion.div
         initial="hidden"
         animate="show"

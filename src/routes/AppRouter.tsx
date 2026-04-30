@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom'
 
 import { AdminLayout } from '@/layout/AdminLayout'
 
@@ -17,7 +17,6 @@ const SettingsPage = lazy(() => import('@/features/settings/pages/SettingsPage')
 const SettingsProfilePage = lazy(() => import('@/features/settings/pages/SettingsProfilePage'))
 const SettingsSecurityPage = lazy(() => import('@/features/settings/pages/SettingsSecurityPage'))
 const SettingsLegalPage = lazy(() => import('@/features/settings/pages/SettingsLegalPage'))
-const SettingsSupportPage = lazy(() => import('@/features/settings/pages/SettingsSupportPage'))
 const NotFoundPage = lazy(() => import('@/routes/NotFoundPage'))
 
 function Loading() {
@@ -46,7 +45,7 @@ const router = createBrowserRouter([
       { path: '/settings/profile', element: <SettingsProfilePage /> },
       { path: '/settings/security', element: <SettingsSecurityPage /> },
       { path: '/settings/legal', element: <SettingsLegalPage /> },
-      { path: '/settings/support', element: <SettingsSupportPage /> },
+      { path: '/settings/support', element: <Navigate to="/support" replace /> },
       { path: '*', element: <NotFoundPage /> },
     ],
   },
