@@ -369,11 +369,12 @@ export default function PayoutsPage() {
                                 <div className="flex items-center gap-1.5">
                                   <span className="whitespace-nowrap font-medium leading-none">{p.vendor}</span>
                                   {(p.refundRatio >= 0.2 || p.suspiciousVendor) && (
-                                    <AlertTriangle
-                                      className="h-3.5 w-3.5 text-amber-500"
-                                      title={p.suspiciousVendor ? 'Suspicious activity' : 'High refund rate'}
-                                      aria-label={p.suspiciousVendor ? 'Suspicious activity' : 'High refund rate'}
-                                    />
+                                    <div title={p.suspiciousVendor ? 'Suspicious activity' : 'High refund rate'}>
+                                      <AlertTriangle
+                                        className="h-3.5 w-3.5 text-amber-500"
+                                        aria-label={p.suspiciousVendor ? 'Suspicious activity' : 'High refund rate'}
+                                      />
+                                    </div>
                                   )}
                                 </div>
                                 <div className="text-xs text-muted-foreground">{p.vendorCountry}</div>
