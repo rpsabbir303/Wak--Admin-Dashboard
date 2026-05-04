@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { NavLink, Outlet, useLocation } from 'react-router-dom'
+import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
 import {
   Bell,
   ChevronDown,
+  ChevronRight,
   LogOut,
   PanelLeftClose,
   PanelLeftOpen,
@@ -28,6 +29,50 @@ import { markAllRead } from '@/app/notifications/notificationsSlice'
 
 const COLLAPSE_KEY = 'admin_sidebar_collapsed'
 const SETTINGS_OPEN_KEY = 'admin_sidebar_settings_open'
+const VENDORS_OPEN_KEY = 'admin_sidebar_vendors_open'
+
+function adminBreadcrumbItems(pathname: string): { label: string; to?: string }[] {
+  if (pathname === '/') {
+    return [{ label: 'Dashboard' }]
+  }
+
+  const driversList = '/admin/vendors/delivery-drivers'
+  if (pathname.startsWith(`${driversList}/`)) {
+    return [
+      { label: 'Dashboard', to: '/' },
+      { label: 'Vendors', to: '/admin/vendors' },
+      { label: 'Delivery Drivers', to: driversList },
+      { label: 'Details' },
+    ]
+  }
+  if (pathname === driversList) {
+    return [
+      { label: 'Dashboard', to: '/' },
+      { label: 'Vendors', to: '/admin/vendors' },
+      { label: 'Delivery Drivers' },
+    ]
+  }
+  if (pathname === '/admin/vendors') {
+    return [{ label: 'Dashboard', to: '/' }, { label: 'Vendors' }]
+  }
+
+  const spBase = '/admin/service-providers'
+  if (pathname.startsWith(`${spBase}/`) && pathname !== `${spBase}/`) {
+    return [
+      { label: 'Dashboard', to: '/' },
+      { label: 'Service Providers', to: spBase },
+      { label: 'Details' },
+    ]
+  }
+  if (pathname === spBase) {
+    return [{ label: 'Dashboard', to: '/' }, { label: 'Service Providers' }]
+  }
+
+  const segments = pathname.split('/').filter(Boolean)
+  const last = segments[segments.length - 1] ?? pathname
+  const label = last.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
+  return [{ label: 'Dashboard', to: '/' }, { label: label }]
+}
 
 function SidebarTooltip({ label, collapsed }: { label: string; collapsed: boolean }) {
   if (!collapsed) return null
@@ -70,6 +115,13 @@ export function AdminLayout() {
     return raw !== '0'
   })
 
+  const [vendorsOpen, setVendorsOpen] = useState(() => {
+    const inVendors = location.pathname.startsWith('/admin/vendors')
+    if (inVendors) return true
+    const raw = localStorage.getItem(VENDORS_OPEN_KEY)
+    return raw !== '0'
+  })
+
   useEffect(() => {
     const inSettings = location.pathname.startsWith('/settings')
     if (!inSettings) return
@@ -78,11 +130,19 @@ export function AdminLayout() {
   }, [location.pathname])
 
   useEffect(() => {
-    // collapse settings menu by default on small screens (unless currently in settings)
+    const inVendors = location.pathname.startsWith('/admin/vendors')
+    if (!inVendors) return
+    const t = window.setTimeout(() => setVendorsOpen(true), 0)
+    return () => window.clearTimeout(t)
+  }, [location.pathname])
+
+  useEffect(() => {
+    // collapse settings / vendors menus by default on small screens when not on those routes
     const mql = window.matchMedia('(max-width: 767px)')
     const handle = () => {
       setIsMobile(mql.matches)
       if (!location.pathname.startsWith('/settings') && mql.matches) setSettingsOpen(false)
+      if (!location.pathname.startsWith('/admin/vendors') && mql.matches) setVendorsOpen(false)
     }
     handle()
     mql.addEventListener('change', handle)
@@ -96,16 +156,36 @@ export function AdminLayout() {
       !('children' in i)
 
     const links = adminMenu.filter(isLink)
-    const group = adminMenu.find((i) => 'children' in i && i.key === 'settings')
-    const mainKeys = new Set(['dashboard', 'users', 'vendors'])
-    const mgmtKeys = new Set(['products', 'services', 'orders', 'delivery', 'payouts', 'support'])
+    const settingsGroup = adminMenu.find((i) => 'children' in i && i.key === 'settings')
+    const vendorsGroup = adminMenu.find((i) => 'children' in i && i.key === 'vendors')
+
+    const mainKeys = new Set(['dashboard', 'users'])
+    const managementLinkOrder = [
+      'service_providers',
+      'products',
+      'services',
+      'orders',
+      'delivery',
+      'payouts',
+      'support',
+    ] as const
     const sysKeys = new Set(['analytics'])
 
     const main = links.filter((l) => mainKeys.has(l.key))
-    const management = links.filter((l) => mgmtKeys.has(l.key))
+    const managementLinks = managementLinkOrder
+      .map((key) => links.find((l) => l.key === key))
+      .filter((l): l is NonNullable<(typeof links)[number]> => Boolean(l))
     const system = links.filter((l) => sysKeys.has(l.key))
-    return { main, management, system, settings: group && 'children' in group ? group : null }
+    return {
+      main,
+      managementLinks,
+      system,
+      vendors: vendorsGroup && 'children' in vendorsGroup ? vendorsGroup : null,
+      settings: settingsGroup && 'children' in settingsGroup ? settingsGroup : null,
+    }
   }, [])
+
+  const breadcrumbItems = useMemo(() => adminBreadcrumbItems(location.pathname), [location.pathname])
 
   useEffect(() => {
     // close mobile drawer on navigation
@@ -183,74 +263,310 @@ export function AdminLayout() {
         <div className="flex-1 overflow-y-auto overflow-x-hidden sidebar-scroll">
           <nav className="px-3 py-2">
             <div className="space-y-5">
-              {(
-                [
-                  { label: 'MAIN', items: sectionedMenu.main },
-                  { label: 'MANAGEMENT', items: sectionedMenu.management },
-                  { label: 'SYSTEM', items: sectionedMenu.system },
-                ] as const
-              ).map((section) => (
-                <div key={section.label} className="space-y-2">
-                  {(!collapsed || isMobile) && (
-                    <div className="px-3 text-[11px] font-medium tracking-wider text-muted-foreground">
-                      {section.label}
-                    </div>
-                  )}
-                  <div className="space-y-1">
-                    {section.items.map((item) => {
-                      const Icon = item.icon
-                      const showDot =
-                        (item.key === 'support' && unreadByKind.support) ||
-                        (item.key === 'orders' && unreadByKind.orders) ||
-                        (item.key === 'delivery' && unreadByKind.delivery)
-                      return (
-                        <NavLink
-                          key={item.key}
-                          to={item.to}
-                          onClick={() => isMobile && setMobileOpen(false)}
-                          className={({ isActive }) =>
-                            cn(
-                              'group relative flex items-center gap-3 rounded-xl border border-transparent px-3 py-2.5 text-sm font-medium tracking-tight text-muted-foreground transition-colors',
-                              'hover:bg-[#895129]/5 hover:text-[#895129]',
-                              isActive &&
-                                'bg-[#895129]/10 text-[#895129] border-[#895129]/20 shadow-[0_4px_12px_rgba(137,81,41,0.12)] font-semibold',
-                              collapsed && !isMobile && 'justify-center px-2',
-                            )
-                          }
-                          title={collapsed && !isMobile ? item.label : undefined}
-                        >
-                          {({ isActive }) => (
-                            <>
+              {/* MAIN */}
+              <div className="space-y-2">
+                {(!collapsed || isMobile) && (
+                  <div className="px-3 text-[11px] font-medium tracking-wider text-muted-foreground">
+                    MAIN
+                  </div>
+                )}
+                <div className="space-y-1">
+                  {sectionedMenu.main.map((item) => {
+                    const Icon = item.icon
+                    const showDot =
+                      (item.key === 'support' && unreadByKind.support) ||
+                      (item.key === 'orders' && unreadByKind.orders) ||
+                      (item.key === 'delivery' && unreadByKind.delivery)
+                    return (
+                      <NavLink
+                        key={item.key}
+                        to={item.to}
+                        onClick={() => isMobile && setMobileOpen(false)}
+                        className={({ isActive }) =>
+                          cn(
+                            'group relative flex items-center gap-3 rounded-xl border border-transparent px-3 py-2.5 text-sm font-medium tracking-tight text-muted-foreground transition-colors',
+                            'hover:bg-[#895129]/5 hover:text-[#895129]',
+                            isActive &&
+                              'bg-primary/10 text-[#895129] border-[#895129]/20 shadow-[0_4px_12px_rgba(137,81,41,0.12)] font-semibold',
+                            collapsed && !isMobile && 'justify-center px-2',
+                          )
+                        }
+                        title={collapsed && !isMobile ? item.label : undefined}
+                      >
+                        {({ isActive }) => (
+                          <>
+                            {isActive && (
+                              <motion.span
+                                layoutId="sidebar-active-indicator-main"
+                                className="absolute left-0 top-1/2 h-6 w-1 -translate-y-1/2 rounded-full bg-[#895129]"
+                              />
+                            )}
+                            <motion.span
+                              whileHover={{ x: 4, scale: 1.01 }}
+                              className="flex items-center gap-3 group-hover:translate-x-1"
+                            >
+                              <motion.span
+                                whileHover={{ scale: 1.05 }}
+                                className={cn(
+                                  'relative',
+                                  isActive ? 'text-[#895129]' : 'text-muted-foreground group-hover:text-[#895129]',
+                                )}
+                              >
+                                <Icon className="h-4 w-4" />
+                                {showDot && (
+                                  <span className="absolute -right-1 -top-1 h-2 w-2 rounded-full bg-red-500 animate-pulse" />
+                                )}
+                              </motion.span>
+                              {(!collapsed || isMobile) && <span>{item.label}</span>}
+                            </motion.span>
+                            <SidebarTooltip label={item.label} collapsed={collapsed && !isMobile} />
+                          </>
+                        )}
+                      </NavLink>
+                    )
+                  })}
+                </div>
+              </div>
+
+              {/* MANAGEMENT */}
+              <div className="space-y-2">
+                {(!collapsed || isMobile) && (
+                  <div className="px-3 text-[11px] font-medium tracking-wider text-muted-foreground">
+                    MANAGEMENT
+                  </div>
+                )}
+                <div className="space-y-1">
+                  {/* Vendors accordion */}
+                  {sectionedMenu.vendors && (
+                    <div className="space-y-1">
+                      {(() => {
+                        const item = sectionedMenu.vendors
+                        const Icon = item.icon
+                        const isActive = location.pathname.startsWith('/admin/vendors')
+                        const open = vendorsOpen && (!collapsed || isMobile)
+                        return (
+                          <>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const next = !vendorsOpen
+                                setVendorsOpen(next)
+                                localStorage.setItem(VENDORS_OPEN_KEY, next ? '1' : '0')
+                              }}
+                              className={cn(
+                                'group relative w-full flex items-center gap-3 rounded-xl border border-transparent px-3 py-2.5 text-sm font-medium tracking-tight text-muted-foreground transition-colors',
+                                'hover:bg-[#895129]/5 hover:text-[#895129]',
+                                isActive &&
+                                  'bg-primary/10 text-[#895129] border-[#895129]/20 shadow-[0_4px_12px_rgba(137,81,41,0.12)] font-semibold',
+                                collapsed && !isMobile && 'justify-center px-2',
+                              )}
+                              title={collapsed && !isMobile ? item.label : undefined}
+                              aria-expanded={open}
+                            >
                               {isActive && (
                                 <motion.span
-                                  layoutId="sidebar-active-indicator"
+                                  layoutId="sidebar-active-indicator-vendors"
                                   className="absolute left-0 top-1/2 h-6 w-1 -translate-y-1/2 rounded-full bg-[#895129]"
                                 />
                               )}
-                              <motion.span whileHover={{ x: 4, scale: 1.01 }} className="flex items-center gap-3 group-hover:translate-x-1">
-                                <motion.span
-                                  whileHover={{ scale: 1.05 }}
+                              <motion.span whileHover={{ x: 4, scale: 1.01 }} className="flex items-center gap-3">
+                                <span
                                   className={cn(
-                                    'relative',
                                     isActive ? 'text-[#895129]' : 'text-muted-foreground group-hover:text-[#895129]',
                                   )}
                                 >
                                   <Icon className="h-4 w-4" />
-                                  {showDot && (
-                                    <span className="absolute -right-1 -top-1 h-2 w-2 rounded-full bg-red-500 animate-pulse" />
-                                  )}
-                                </motion.span>
-                                {(!collapsed || isMobile) && <span>{item.label}</span>}
+                                </span>
+                                {(!collapsed || isMobile) && (
+                                  <>
+                                    <span className="flex-1 text-left">{item.label}</span>
+                                    <ChevronDown
+                                      className={cn(
+                                        'h-4 w-4 transition-transform duration-200',
+                                        open && 'rotate-180',
+                                        isActive && 'text-[#895129]',
+                                      )}
+                                    />
+                                  </>
+                                )}
                               </motion.span>
                               <SidebarTooltip label={item.label} collapsed={collapsed && !isMobile} />
-                            </>
-                          )}
-                        </NavLink>
-                      )
-                    })}
-                  </div>
+                            </button>
+
+                            <AnimatePresence initial={false}>
+                              {open && (!collapsed || isMobile) && (
+                                <motion.div
+                                  initial={{ height: 0, opacity: 0 }}
+                                  animate={{ height: 'auto', opacity: 1 }}
+                                  exit={{ height: 0, opacity: 0 }}
+                                  transition={{ duration: 0.24, ease: [0.4, 0, 0.2, 1] }}
+                                  className="overflow-hidden"
+                                >
+                                  <div className="ml-2 space-y-0.5 border-l-2 border-[#895129]/15 pl-2 py-0.5">
+                                    {item.children.map((child) => {
+                                      const ChildIcon = child.icon
+                                      const childActive =
+                                        child.key === 'vendors_delivery_drivers'
+                                          ? location.pathname.startsWith('/admin/vendors/delivery-drivers')
+                                          : location.pathname === child.to
+                                      return (
+                                        <motion.div key={child.key} whileHover={{ x: 3 }} transition={{ duration: 0.18 }}>
+                                          <NavLink
+                                            to={child.to}
+                                            onClick={() => isMobile && setMobileOpen(false)}
+                                            className={cn(
+                                              'group relative flex items-center gap-2 rounded-lg px-2.5 py-2 text-[13px] font-medium tracking-tight text-muted-foreground transition-colors',
+                                              'hover:bg-[#895129]/5 hover:text-[#895129]',
+                                              childActive &&
+                                                'bg-primary/10 text-[#895129] font-semibold shadow-[0_2px_8px_rgba(137,81,41,0.08)]',
+                                            )}
+                                          >
+                                            <span
+                                              className={cn(
+                                                childActive ? 'text-[#895129]' : 'text-muted-foreground group-hover:text-[#895129]',
+                                              )}
+                                            >
+                                              <ChildIcon className="h-3.5 w-3.5 shrink-0" />
+                                            </span>
+                                            <span>{child.label}</span>
+                                          </NavLink>
+                                        </motion.div>
+                                      )
+                                    })}
+                                  </div>
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+                          </>
+                        )
+                      })()}
+                    </div>
+                  )}
+
+                  {sectionedMenu.managementLinks.map((item) => {
+                    const Icon = item.icon
+                    const showDot =
+                      (item.key === 'support' && unreadByKind.support) ||
+                      (item.key === 'orders' && unreadByKind.orders) ||
+                      (item.key === 'delivery' && unreadByKind.delivery)
+                    return (
+                      <NavLink
+                        key={item.key}
+                        to={item.to}
+                        onClick={() => isMobile && setMobileOpen(false)}
+                        className={({ isActive }) => {
+                          const linkActive =
+                            isActive ||
+                            (item.key === 'service_providers' &&
+                              location.pathname.startsWith('/admin/service-providers'))
+                          return cn(
+                            'group relative flex items-center gap-3 rounded-xl border border-transparent px-3 py-2.5 text-sm font-medium tracking-tight text-muted-foreground transition-colors',
+                            'hover:bg-[#895129]/5 hover:text-[#895129]',
+                            linkActive &&
+                              'bg-primary/10 text-[#895129] border-[#895129]/20 shadow-[0_4px_12px_rgba(137,81,41,0.12)] font-semibold',
+                            collapsed && !isMobile && 'justify-center px-2',
+                          )
+                        }}
+                        title={collapsed && !isMobile ? item.label : undefined}
+                      >
+                        {({ isActive }) => {
+                          const linkActive =
+                            isActive ||
+                            (item.key === 'service_providers' &&
+                              location.pathname.startsWith('/admin/service-providers'))
+                          return (
+                          <>
+                            {linkActive && (
+                              <motion.span
+                                layoutId="sidebar-active-indicator-main"
+                                className="absolute left-0 top-1/2 h-6 w-1 -translate-y-1/2 rounded-full bg-[#895129]"
+                              />
+                            )}
+                            <motion.span
+                              whileHover={{ x: 4, scale: 1.01 }}
+                              className="flex items-center gap-3 group-hover:translate-x-1"
+                            >
+                              <motion.span
+                                whileHover={{ scale: 1.05 }}
+                                className={cn(
+                                  'relative',
+                                  linkActive ? 'text-[#895129]' : 'text-muted-foreground group-hover:text-[#895129]',
+                                )}
+                              >
+                                <Icon className="h-4 w-4" />
+                                {showDot && (
+                                  <span className="absolute -right-1 -top-1 h-2 w-2 rounded-full bg-red-500 animate-pulse" />
+                                )}
+                              </motion.span>
+                              {(!collapsed || isMobile) && <span>{item.label}</span>}
+                            </motion.span>
+                            <SidebarTooltip label={item.label} collapsed={collapsed && !isMobile} />
+                          </>
+                          )
+                        }}
+                      </NavLink>
+                    )
+                  })}
                 </div>
-              ))}
+              </div>
+
+              {/* SYSTEM */}
+              <div className="space-y-2">
+                {(!collapsed || isMobile) && (
+                  <div className="px-3 text-[11px] font-medium tracking-wider text-muted-foreground">
+                    SYSTEM
+                  </div>
+                )}
+                <div className="space-y-1">
+                  {sectionedMenu.system.map((item) => {
+                    const Icon = item.icon
+                    return (
+                      <NavLink
+                        key={item.key}
+                        to={item.to}
+                        onClick={() => isMobile && setMobileOpen(false)}
+                        className={({ isActive }) =>
+                          cn(
+                            'group relative flex items-center gap-3 rounded-xl border border-transparent px-3 py-2.5 text-sm font-medium tracking-tight text-muted-foreground transition-colors',
+                            'hover:bg-[#895129]/5 hover:text-[#895129]',
+                            isActive &&
+                              'bg-primary/10 text-[#895129] border-[#895129]/20 shadow-[0_4px_12px_rgba(137,81,41,0.12)] font-semibold',
+                            collapsed && !isMobile && 'justify-center px-2',
+                          )
+                        }
+                        title={collapsed && !isMobile ? item.label : undefined}
+                      >
+                        {({ isActive }) => (
+                          <>
+                            {isActive && (
+                              <motion.span
+                                layoutId="sidebar-active-indicator-main"
+                                className="absolute left-0 top-1/2 h-6 w-1 -translate-y-1/2 rounded-full bg-[#895129]"
+                              />
+                            )}
+                            <motion.span
+                              whileHover={{ x: 4, scale: 1.01 }}
+                              className="flex items-center gap-3 group-hover:translate-x-1"
+                            >
+                              <motion.span
+                                whileHover={{ scale: 1.05 }}
+                                className={cn(
+                                  'relative',
+                                  isActive ? 'text-[#895129]' : 'text-muted-foreground group-hover:text-[#895129]',
+                                )}
+                              >
+                                <Icon className="h-4 w-4" />
+                              </motion.span>
+                              {(!collapsed || isMobile) && <span>{item.label}</span>}
+                            </motion.span>
+                            <SidebarTooltip label={item.label} collapsed={collapsed && !isMobile} />
+                          </>
+                        )}
+                      </NavLink>
+                    )
+                  })}
+                </div>
+              </div>
 
               {/* Settings accordion */}
               {sectionedMenu.settings && (
@@ -279,7 +595,7 @@ export function AdminLayout() {
                               'group relative w-full flex items-center gap-3 rounded-xl border border-transparent px-3 py-2.5 text-sm font-medium tracking-tight text-muted-foreground transition-colors',
                               'hover:bg-[#895129]/5 hover:text-[#895129]',
                               isActive &&
-                                'bg-[#895129]/10 text-[#895129] border-[#895129]/20 shadow-[0_4px_12px_rgba(137,81,41,0.12)] font-semibold',
+                                'bg-primary/10 text-[#895129] border-[#895129]/20 shadow-[0_4px_12px_rgba(137,81,41,0.12)] font-semibold',
                               collapsed && !isMobile && 'justify-center px-2',
                             )}
                             title={collapsed && !isMobile ? item.label : undefined}
@@ -287,7 +603,7 @@ export function AdminLayout() {
                           >
                             {isActive && (
                               <motion.span
-                                layoutId="sidebar-active-indicator"
+                                layoutId="sidebar-active-indicator-settings"
                                 className="absolute left-0 top-1/2 h-6 w-1 -translate-y-1/2 rounded-full bg-[#895129]"
                               />
                             )}
@@ -324,36 +640,32 @@ export function AdminLayout() {
                                 transition={{ duration: 0.22, ease: 'easeOut' }}
                                 className="overflow-hidden"
                               >
-                                <div className="space-y-1">
+                                <div className="ml-2 space-y-0.5 border-l-2 border-[#895129]/15 pl-2 py-0.5">
                                   {item.children.map((child) => {
                                     const ChildIcon = child.icon
                                     const childActive = location.pathname === child.to
                                     return (
-                                      <NavLink
-                                        key={child.key}
-                                        to={child.to}
-                                        onClick={() => isMobile && setMobileOpen(false)}
-                                        className={cn(
-                                          'group relative flex items-center gap-2 rounded-xl px-3 py-2 text-[13px] font-medium text-muted-foreground transition-colors pl-10',
-                                          'hover:bg-[#895129]/5 hover:text-[#895129]',
-                                          childActive && 'bg-[#895129]/10 text-[#895129] font-semibold',
-                                        )}
-                                      >
-                                        <span
+                                      <motion.div key={child.key} whileHover={{ x: 3 }} transition={{ duration: 0.18 }}>
+                                        <NavLink
+                                          to={child.to}
+                                          onClick={() => isMobile && setMobileOpen(false)}
                                           className={cn(
-                                            'absolute left-6 top-1/2 h-1.5 w-1.5 -translate-y-1/2 rounded-full',
-                                            childActive ? 'bg-[#895129]' : 'bg-black/20 group-hover:bg-[#895129]',
-                                          )}
-                                        />
-                                        <span
-                                          className={cn(
-                                            childActive ? 'text-[#895129]' : 'text-muted-foreground group-hover:text-[#895129]',
+                                            'group relative flex items-center gap-2 rounded-lg px-2.5 py-2 text-[13px] font-medium tracking-tight text-muted-foreground transition-colors',
+                                            'hover:bg-[#895129]/5 hover:text-[#895129]',
+                                            childActive &&
+                                              'bg-primary/10 text-[#895129] font-semibold shadow-[0_2px_8px_rgba(137,81,41,0.08)]',
                                           )}
                                         >
-                                          <ChildIcon className="h-4 w-4" />
-                                        </span>
-                                        <span>{child.label}</span>
-                                      </NavLink>
+                                          <span
+                                            className={cn(
+                                              childActive ? 'text-[#895129]' : 'text-muted-foreground group-hover:text-[#895129]',
+                                            )}
+                                          >
+                                            <ChildIcon className="h-3.5 w-3.5 shrink-0" />
+                                          </span>
+                                          <span>{child.label}</span>
+                                        </NavLink>
+                                      </motion.div>
                                     )
                                   })}
                                 </div>
@@ -435,9 +747,29 @@ export function AdminLayout() {
                   placeholder="Search users, orders, vendors…"
                 />
               </div>
-              <div className="text-sm text-muted-foreground">
-                {location.pathname === '/' ? 'Dashboard' : location.pathname}
-              </div>
+              <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-1 text-sm text-muted-foreground">
+                {breadcrumbItems.map((crumb, i) => (
+                  <span key={`${crumb.label}-${i}`} className="inline-flex items-center gap-1">
+                    {i > 0 && <ChevronRight className="h-3.5 w-3.5 shrink-0 text-muted-foreground/50" aria-hidden />}
+                    {crumb.to && i < breadcrumbItems.length - 1 ? (
+                      <Link
+                        to={crumb.to}
+                        className="transition-colors hover:text-[#895129] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#895129]/30 rounded-sm"
+                      >
+                        {crumb.label}
+                      </Link>
+                    ) : (
+                      <span
+                        className={cn(
+                          i === breadcrumbItems.length - 1 && 'font-medium text-foreground',
+                        )}
+                      >
+                        {crumb.label}
+                      </span>
+                    )}
+                  </span>
+                ))}
+              </nav>
             </div>
 
             <div className="flex items-center gap-2">
@@ -525,7 +857,17 @@ export function AdminLayout() {
         </header>
 
         <main className="p-4 md:p-6">
-          <Outlet />
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={location.pathname}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
+            >
+              <Outlet />
+            </motion.div>
+          </AnimatePresence>
         </main>
       </div>
     </div>

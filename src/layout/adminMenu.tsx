@@ -1,6 +1,9 @@
+import type { ComponentType } from 'react'
 import {
   BarChart3,
+  Bike,
   Boxes,
+  Briefcase,
   Building2,
   ClipboardList,
   FileText,
@@ -9,6 +12,7 @@ import {
   Lock,
   Package,
   Settings,
+  Store,
   Truck,
   User,
   Users,
@@ -19,13 +23,13 @@ export type AdminMenuLink = {
   key: string
   label: string
   to: string
-  icon: React.ComponentType<{ className?: string }>
+  icon: ComponentType<{ className?: string }>
 }
 
 export type AdminMenuGroup = {
   key: string
   label: string
-  icon: React.ComponentType<{ className?: string }>
+  icon: ComponentType<{ className?: string }>
   children: AdminMenuLink[]
 }
 
@@ -34,7 +38,21 @@ export type AdminMenuItem = AdminMenuLink | AdminMenuGroup
 export const adminMenu: AdminMenuItem[] = [
   { key: 'dashboard', label: 'Dashboard', to: '/', icon: LayoutDashboard },
   { key: 'users', label: 'Users', to: '/users', icon: Users },
-  { key: 'vendors', label: 'Vendors', to: '/vendors', icon: Building2 },
+  {
+    key: 'vendors',
+    label: 'Vendors',
+    icon: Building2,
+    children: [
+      { key: 'vendors_all', label: 'All Vendors', to: '/admin/vendors', icon: Store },
+      {
+        key: 'vendors_delivery_drivers',
+        label: 'Delivery Drivers',
+        to: '/admin/vendors/delivery-drivers',
+        icon: Bike,
+      },
+    ],
+  },
+  { key: 'service_providers', label: 'Service Providers', to: '/admin/service-providers', icon: Briefcase },
   { key: 'products', label: 'Products', to: '/products', icon: Package },
   { key: 'services', label: 'Services', to: '/services', icon: Boxes },
   { key: 'orders', label: 'Orders', to: '/orders', icon: ClipboardList },
@@ -53,4 +71,3 @@ export const adminMenu: AdminMenuItem[] = [
     ],
   },
 ]
-

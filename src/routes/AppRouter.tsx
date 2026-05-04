@@ -1,7 +1,8 @@
 import { lazy, Suspense } from 'react'
-import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, Navigate, RouterProvider, useParams } from 'react-router-dom'
 
 import { AdminLayout } from '@/layout/AdminLayout'
+import { DeliveryDriverDetailsSkeleton } from '@/features/delivery-drivers/pages/DeliveryDriverDetailsSkeleton'
 
 const DashboardPage = lazy(() => import('@/features/dashboard/pages/DashboardPage'))
 const UsersPage = lazy(() => import('@/features/users/pages/UsersPage'))
@@ -10,6 +11,10 @@ const ProductsPage = lazy(() => import('@/features/catalog/pages/ProductsPage'))
 const ServicesPage = lazy(() => import('@/features/catalog/pages/ServicesPage'))
 const OrdersPage = lazy(() => import('@/features/orders/pages/OrdersPage'))
 const DeliveryPage = lazy(() => import('@/features/delivery/pages/DeliveryPage'))
+const DeliveryDriversPage = lazy(() => import('@/features/delivery-drivers/pages/DeliveryDriversPage'))
+const DeliveryDriverDetailsPage = lazy(() => import('@/features/delivery-drivers/pages/DeliveryDriverDetailsPage'))
+const ServiceProvidersPage = lazy(() => import('@/features/service-providers/pages/ServiceProvidersPage'))
+const ServiceProviderDetailsPage = lazy(() => import('@/features/service-providers/pages/ServiceProviderDetailsPage'))
 const PayoutsPage = lazy(() => import('@/features/payouts/pages/PayoutsPage'))
 const SupportPage = lazy(() => import('@/features/support/pages/SupportPage'))
 const AnalyticsPage = lazy(() => import('@/features/analytics/pages/AnalyticsPage'))
@@ -27,13 +32,33 @@ function Loading() {
   )
 }
 
+function LegacyDeliveryDriverDetailRedirect() {
+  const { id } = useParams()
+  if (!id) return <Navigate to="/admin/vendors/delivery-drivers" replace />
+  return <Navigate to={`/admin/vendors/delivery-drivers/${encodeURIComponent(id)}`} replace />
+}
+
 const router = createBrowserRouter([
   {
     element: <AdminLayout />,
     children: [
       { path: '/', element: <DashboardPage /> },
       { path: '/users', element: <UsersPage /> },
-      { path: '/vendors', element: <VendorsPage /> },
+      { path: '/vendors', element: <Navigate to="/admin/vendors" replace /> },
+      { path: '/admin/vendors', element: <VendorsPage /> },
+      { path: '/admin/vendors/delivery-drivers', element: <DeliveryDriversPage /> },
+      {
+        path: '/admin/vendors/delivery-drivers/:id',
+        element: (
+          <Suspense fallback={<DeliveryDriverDetailsSkeleton />}>
+            <DeliveryDriverDetailsPage />
+          </Suspense>
+        ),
+      },
+      { path: '/admin/delivery-drivers', element: <Navigate to="/admin/vendors/delivery-drivers" replace /> },
+      { path: '/admin/delivery-drivers/:id', element: <LegacyDeliveryDriverDetailRedirect /> },
+      { path: '/admin/service-providers', element: <ServiceProvidersPage /> },
+      { path: '/admin/service-providers/:id', element: <ServiceProviderDetailsPage /> },
       { path: '/products', element: <ProductsPage /> },
       { path: '/services', element: <ServicesPage /> },
       { path: '/orders', element: <OrdersPage /> },

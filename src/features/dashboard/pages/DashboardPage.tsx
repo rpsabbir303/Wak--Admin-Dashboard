@@ -203,7 +203,7 @@ export default function DashboardPage() {
       status: (['Ongoing', 'Pickup', 'En route'] as const)[i % 3] as DeliveryStatus,
     })),
     activity: [
-      { id: 'a1', title: 'New vendor submitted documents', meta: '2m ago', href: '/vendors' },
+      { id: 'a1', title: 'New vendor submitted documents', meta: '2m ago', href: '/admin/vendors' },
       { id: 'a2', title: 'Refund requested for Order #28905', meta: '18m ago', href: '/orders' },
       { id: 'a3', title: 'New support ticket created', meta: '42m ago', href: '/support' },
       { id: 'a4', title: 'Payout processed for Vendor #1042', meta: '1h ago', href: '/payouts' },
@@ -255,7 +255,7 @@ export default function DashboardPage() {
                 label: 'Total Vendors',
                 value: totals.vendors,
                 format: (v: number) => formatNumber(v),
-                href: '/vendors',
+                href: '/admin/vendors',
               },
               {
                 kind: 'stat',
@@ -284,7 +284,7 @@ export default function DashboardPage() {
                 label: 'Pending Approvals',
                 value: meta.pendingApprovals,
                 format: (v: number) => formatNumber(v),
-                href: '/vendors',
+                href: '/admin/vendors',
               },
               {
                 kind: 'stat',
@@ -319,7 +319,7 @@ export default function DashboardPage() {
                     </motion.div>
                     <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
                       <Button asChild size="sm" className="w-full">
-                        <Link to="/vendors">Add Vendor</Link>
+                        <Link to="/admin/vendors">Add Vendor</Link>
                       </Button>
                     </motion.div>
                     <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
@@ -421,7 +421,7 @@ export default function DashboardPage() {
                 <CardTitle>Pending vendor approvals</CardTitle>
                 <div className="flex items-center gap-2">
                   <Button asChild size="sm" variant="ghost" className="h-8 px-2 text-muted-foreground hover:text-foreground">
-                    <Link to="/vendors">View all</Link>
+                    <Link to="/admin/vendors">View all</Link>
                   </Button>
                   <Badge variant="secondary">{meta.pendingApprovals}</Badge>
                 </div>
@@ -458,7 +458,7 @@ export default function DashboardPage() {
                             </motion.div>
                             <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
                               <Button asChild size="sm" variant="outline" className="h-8 px-3">
-                                <Link to="/vendors">View</Link>
+                                <Link to="/admin/vendors">View</Link>
                               </Button>
                             </motion.div>
                           </div>

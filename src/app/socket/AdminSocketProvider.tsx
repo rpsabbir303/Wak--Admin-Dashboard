@@ -1,7 +1,8 @@
-import { useEffect, type PropsWithChildren } from 'react'
+import { useEffect, useState, type PropsWithChildren } from 'react'
 import { io, type Socket } from 'socket.io-client'
 
 import { pushNotification } from '@/app/notifications/notificationsSlice'
+import { AdminSocketContext } from '@/app/socket/AdminSocketContext'
 import { useAppDispatch } from '@/hooks/redux'
 import { baseApi } from '@/app/api/baseApi'
 
@@ -20,21 +21,40 @@ type DeliveryUpdatePayload = {
   status: string
 }
 
+type DriverSignupPayload = {
+  driverId?: string
+  name?: string
+}
+
+type DriverApprovalPayload = {
+  driverId: string
+  status: string
+}
+
 const socketUrl = import.meta.env.VITE_SOCKET_URL ?? import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:4000'
 
 export function AdminSocketProvider({ children }: PropsWithChildren) {
   const dispatch = useAppDispatch()
+  const [socket, setSocket] = useState<Socket | null>(null)
 
   useEffect(() => {
     const token = localStorage.getItem('admin_token')
-    if (!token) return
+    if (!token) {
+      queueMicrotask(() => setSocket(null))
+      return
+    }
 
-    const socket: Socket = io(socketUrl, {
+    const s: Socket = io(socketUrl, {
       transports: ['websocket'],
       auth: { token },
     })
+    queueMicrotask(() => setSocket(s))
 
-    socket.on('connect', () => {
+    const invalidateDrivers = () => {
+      dispatch(baseApi.util.invalidateTags(['DeliveryDrivers']))
+    }
+
+    s.on('connect', () => {
       dispatch(
         pushNotification({
           kind: 'system',
@@ -44,7 +64,7 @@ export function AdminSocketProvider({ children }: PropsWithChildren) {
       )
     })
 
-    socket.on('order:new', (payload: OrderNewPayload) => {
+    s.on('order:new', (payload: OrderNewPayload) => {
       dispatch(
         pushNotification({
           kind: 'order',
@@ -55,7 +75,7 @@ export function AdminSocketProvider({ children }: PropsWithChildren) {
       dispatch(baseApi.util.invalidateTags(['Dashboard', 'Orders']))
     })
 
-    socket.on('message:new', (payload: MessageNewPayload) => {
+    s.on('message:new', (payload: MessageNewPayload) => {
       dispatch(
         pushNotification({
           kind: 'message',
@@ -66,7 +86,7 @@ export function AdminSocketProvider({ children }: PropsWithChildren) {
       dispatch(baseApi.util.invalidateTags(['Dashboard']))
     })
 
-    socket.on('delivery:update', (payload: DeliveryUpdatePayload) => {
+    s.on('delivery:update', (payload: DeliveryUpdatePayload) => {
       dispatch(
         pushNotification({
           kind: 'delivery',
@@ -74,10 +94,50 @@ export function AdminSocketProvider({ children }: PropsWithChildren) {
           description: `${payload.deliveryId} • ${payload.status}`,
         }),
       )
-      dispatch(baseApi.util.invalidateTags(['Dashboard']))
+      dispatch(baseApi.util.invalidateTags(['Dashboard', 'DeliveryDrivers']))
     })
 
-    socket.on('disconnect', () => {
+    s.on('driver:status', () => {
+      invalidateDrivers()
+    })
+
+    s.on('driver:delivery', (payload: { driverId?: string; orderId?: string }) => {
+      dispatch(
+        pushNotification({
+          kind: 'delivery',
+          title: 'Live delivery',
+          description:
+            payload.driverId && payload.orderId
+              ? `Driver ${payload.driverId} • Order ${payload.orderId}`
+              : 'Driver location or assignment updated.',
+        }),
+      )
+      invalidateDrivers()
+    })
+
+    s.on('driver:signup', (payload: DriverSignupPayload) => {
+      dispatch(
+        pushNotification({
+          kind: 'system',
+          title: 'New driver signup',
+          description: payload.name ? `${payload.name} submitted documents.` : 'A new driver applied.',
+        }),
+      )
+      invalidateDrivers()
+    })
+
+    s.on('driver:approval', (payload: DriverApprovalPayload) => {
+      dispatch(
+        pushNotification({
+          kind: 'system',
+          title: 'Driver approval update',
+          description: `${payload.driverId} • ${payload.status}`,
+        }),
+      )
+      invalidateDrivers()
+    })
+
+    s.on('disconnect', () => {
       dispatch(
         pushNotification({
           kind: 'system',
@@ -88,10 +148,10 @@ export function AdminSocketProvider({ children }: PropsWithChildren) {
     })
 
     return () => {
-      socket.disconnect()
+      s.disconnect()
+      queueMicrotask(() => setSocket(null))
     }
   }, [dispatch])
 
-  return children
+  return <AdminSocketContext.Provider value={socket}>{children}</AdminSocketContext.Provider>
 }
-
