@@ -98,7 +98,7 @@ export default function ServiceProviderDetailsPage() {
       </div>
 
       <div className="grid gap-4 lg:grid-cols-3">
-        <Card className="border-black/10 shadow-soft lg:col-span-2">
+        <Card className="border-[#EEE7DF] shadow-soft lg:col-span-2">
           <CardHeader>
             <CardTitle className="text-base">Contact</CardTitle>
           </CardHeader>
@@ -120,7 +120,7 @@ export default function ServiceProviderDetailsPage() {
           </CardContent>
         </Card>
 
-        <Card className="border-black/10 shadow-soft">
+        <Card className="border-[#EEE7DF] shadow-soft">
           <CardHeader>
             <CardTitle className="text-base">Performance</CardTitle>
           </CardHeader>
@@ -144,7 +144,7 @@ export default function ServiceProviderDetailsPage() {
       </div>
 
       {row.notes ? (
-        <Card className="border-black/10 shadow-soft">
+        <Card className="border-[#EEE7DF] shadow-soft">
           <CardHeader>
             <CardTitle className="text-base">Admin notes</CardTitle>
           </CardHeader>

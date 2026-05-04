@@ -7,7 +7,7 @@ export function DeliveryDriverDetailsSkeleton() {
       <div className="h-40 rounded-2xl bg-muted" />
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
         {Array.from({ length: 10 }).map((_, i) => (
-          <Card key={i} className="rounded-xl border-black/10">
+          <Card key={i} className="rounded-xl border-[#EEE7DF]">
             <CardHeader className="pb-2">
               <div className="h-3 w-24 rounded bg-muted" />
             </CardHeader>

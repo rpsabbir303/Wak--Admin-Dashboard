@@ -342,7 +342,7 @@ export default function OrdersPage() {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="rounded-lg border border-black/10 bg-white p-3 shadow-soft"
+            className="rounded-lg border border-[#EEE7DF] bg-white p-3 shadow-soft"
           >
             <div className="flex items-start justify-between gap-3">
               <div>
@@ -413,7 +413,7 @@ export default function OrdersPage() {
                   setStatus(e.target.value as PaymentStatus | 'all')
                   setPage(1)
                 }}
-                className="h-10 rounded-lg border border-black/10 bg-white px-3 text-sm"
+                className="h-10 rounded-lg border border-[#EEE7DF] bg-white px-3 text-sm"
               >
                 <option value="all">Payment: all</option>
                 <option value="paid">Paid</option>
@@ -427,7 +427,7 @@ export default function OrdersPage() {
                   setDeliveryStatus(e.target.value as DeliveryStatus | 'all')
                   setPage(1)
                 }}
-                className="h-10 rounded-lg border border-black/10 bg-white px-3 text-sm"
+                className="h-10 rounded-lg border border-[#EEE7DF] bg-white px-3 text-sm"
               >
                 <option value="all">Delivery: all</option>
                 <option value="not_started">Not started</option>
@@ -440,7 +440,7 @@ export default function OrdersPage() {
                   setType(e.target.value as OrderType | 'all')
                   setPage(1)
                 }}
-                className="h-10 rounded-lg border border-black/10 bg-white px-3 text-sm"
+                className="h-10 rounded-lg border border-[#EEE7DF] bg-white px-3 text-sm"
               >
                 <option value="all">Type: all</option>
                 <option value="product">Product</option>
@@ -452,7 +452,7 @@ export default function OrdersPage() {
                   setCountry(e.target.value)
                   setPage(1)
                 }}
-                className="h-10 rounded-lg border border-black/10 bg-white px-3 text-sm"
+                className="h-10 rounded-lg border border-[#EEE7DF] bg-white px-3 text-sm"
               >
                 <option value="all">Country: all</option>
                 {countries.map((c) => (
@@ -628,7 +628,7 @@ export default function OrdersPage() {
           {!selected ? null : (
             <motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.2 }} className="space-y-4">
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                <div className="rounded-lg border border-black/10 p-4">
+                <div className="rounded-lg border border-[#EEE7DF] p-4">
                   <div className="text-sm font-medium">Order info</div>
                   <div className="mt-3 space-y-2 text-sm">
                     <div className="flex items-center justify-between">
@@ -646,7 +646,7 @@ export default function OrdersPage() {
                   </div>
                 </div>
 
-                <div className="rounded-lg border border-black/10 p-4">
+                <div className="rounded-lg border border-[#EEE7DF] p-4">
                   <div className="text-sm font-medium">Payment</div>
                   <div className="mt-3 space-y-2 text-sm">
                     <div className="flex items-center justify-between">
@@ -666,7 +666,7 @@ export default function OrdersPage() {
               </div>
 
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                <div className="rounded-lg border border-black/10 p-4">
+                <div className="rounded-lg border border-[#EEE7DF] p-4">
                   <div className="text-sm font-medium">Customer</div>
                   <div className="mt-3 space-y-1 text-sm">
                     <div className="font-medium">{selected.customer.name}</div>
@@ -674,7 +674,7 @@ export default function OrdersPage() {
                     <div className="text-muted-foreground">{selected.customer.country}</div>
                   </div>
                 </div>
-                <div className="rounded-lg border border-black/10 p-4">
+                <div className="rounded-lg border border-[#EEE7DF] p-4">
                   <div className="text-sm font-medium">Vendor</div>
                   <div className="mt-3 space-y-1 text-sm">
                     <div className="font-medium">{selected.vendor.name}</div>
@@ -683,7 +683,7 @@ export default function OrdersPage() {
                 </div>
               </div>
 
-              <div className="rounded-lg border border-black/10 p-4">
+              <div className="rounded-lg border border-[#EEE7DF] p-4">
                 <div className="text-sm font-medium">Items</div>
                 <div className="mt-3 space-y-2">
                   {selected.items.map((i, idx) => (
@@ -697,7 +697,7 @@ export default function OrdersPage() {
                 </div>
               </div>
 
-              <div className="rounded-lg border border-black/10 p-4">
+              <div className="rounded-lg border border-[#EEE7DF] p-4">
                 <div className="text-sm font-medium">Delivery</div>
                 <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 text-sm">
                   <div className="flex items-center justify-between">
@@ -719,7 +719,7 @@ export default function OrdersPage() {
                 </div>
               </div>
 
-              <div className="rounded-lg border border-black/10 p-4">
+              <div className="rounded-lg border border-[#EEE7DF] p-4">
                 <div className="text-sm font-medium">Timeline</div>
                 <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-4 text-sm">
                   <Badge variant="secondary">Ordered</Badge>

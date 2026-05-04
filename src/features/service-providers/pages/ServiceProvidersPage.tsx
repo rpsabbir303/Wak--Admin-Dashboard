@@ -133,7 +133,7 @@ export default function ServiceProvidersPage() {
           { label: 'Pending review', value: stats.pending },
           { label: 'Suspended', value: stats.suspended },
         ].map((c) => (
-          <Card key={c.label} className="border-black/10 shadow-soft">
+          <Card key={c.label} className="border-[#EEE7DF] shadow-soft">
             <CardHeader className="pb-2">
               <CardTitle className="text-xs font-medium text-muted-foreground">{c.label}</CardTitle>
             </CardHeader>
@@ -144,7 +144,7 @@ export default function ServiceProvidersPage() {
         ))}
       </div>
 
-      <Card className="border-black/10 shadow-soft">
+      <Card className="border-[#EEE7DF] shadow-soft">
         <CardHeader className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between space-y-0">
           <CardTitle className="text-base">Directory</CardTitle>
           <div className="relative w-full sm:w-72">
@@ -173,12 +173,7 @@ export default function ServiceProvidersPage() {
               </TableHeader>
               <TableBody>
                 {filtered.map((p) => (
-                  <MotionTableRow
-                    key={p.id}
-                    layout
-                    initial={false}
-                    className="border-black/5"
-                  >
+                  <MotionTableRow key={p.id} layout initial={false}>
                     <TableCell>
                       <div className="font-medium text-foreground">{p.displayName}</div>
                       <div className="text-xs text-muted-foreground">{p.id}</div>

@@ -167,7 +167,7 @@ export default function DeliveryDriverDetailsPage() {
 
   if (isError || !driver) {
     return (
-      <div className="rounded-xl border border-black/10 bg-white p-10 text-center shadow-soft">
+      <div className="rounded-xl border border-[#EEE7DF] bg-white p-10 text-center shadow-soft">
         <p className="font-semibold">Driver not found</p>
         <Button asChild className="mt-4 bg-[#895129] hover:bg-[#895129]/90">
           <Link to="/admin/vendors/delivery-drivers">Back</Link>
@@ -190,7 +190,7 @@ export default function DeliveryDriverDetailsPage() {
         <span className="text-sm text-muted-foreground">{d.id}</span>
       </div>
 
-      <div className="rounded-2xl border border-black/10 bg-gradient-to-br from-white to-primary/[0.05] p-6 shadow-soft md:p-8">
+      <div className="rounded-2xl border border-[#EEE7DF] bg-gradient-to-br from-white to-primary/[0.05] p-6 shadow-soft md:p-8">
         <div className="flex flex-col gap-6 xl:flex-row xl:justify-between">
           <div className="flex flex-col gap-4 sm:flex-row">
             <Avatar className="h-24 w-24 rounded-2xl border border-primary/20 sm:h-28 sm:w-28">
@@ -265,7 +265,7 @@ export default function DeliveryDriverDetailsPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.03 }}
                 whileHover={{ y: -2 }}
-                className="rounded-xl border-black/10 shadow-soft"
+                className="rounded-xl border-[#EEE7DF] shadow-soft"
               >
                 <CardHeader className="pb-1">
                   <CardTitle className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
@@ -285,7 +285,7 @@ export default function DeliveryDriverDetailsPage() {
             onDownloadDeliveriesExport={() => deliveriesCsv(d)}
           />
 
-          <Card id="driver-live-map" className="scroll-mt-24 rounded-xl border-black/10 shadow-soft">
+          <Card id="driver-live-map" className="scroll-mt-24 rounded-xl border-[#EEE7DF] shadow-soft">
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle className="text-base">Map</CardTitle>
               <Badge variant="secondary">Demo</Badge>
@@ -313,7 +313,7 @@ export default function DeliveryDriverDetailsPage() {
         </div>
 
         <aside className="space-y-4 xl:sticky xl:top-20 xl:self-start">
-          <Card className="rounded-xl border-black/10 shadow-soft">
+          <Card className="rounded-xl border-[#EEE7DF] shadow-soft">
             <CardHeader>
               <CardTitle className="text-sm">Quick info</CardTitle>
             </CardHeader>
@@ -326,12 +326,12 @@ export default function DeliveryDriverDetailsPage() {
                 <span className="text-muted-foreground">Region</span>
                 <span className="text-right text-sm font-medium">{d.assignedRegion}</span>
               </div>
-              <div className="border-t border-black/10 pt-2 text-xs text-muted-foreground">
+              <div className="border-t border-[#EEE7DF] pt-2 text-xs text-muted-foreground">
                 {d.deviceInfo.model} · {d.deviceInfo.os}
               </div>
             </CardContent>
           </Card>
-          <Card className="rounded-xl border-black/10 shadow-soft">
+          <Card className="rounded-xl border-[#EEE7DF] shadow-soft">
             <CardHeader>
               <CardTitle className="text-sm">Emergency</CardTitle>
             </CardHeader>
@@ -357,7 +357,7 @@ export default function DeliveryDriverDetailsPage() {
           </DialogHeader>
           <textarea
             className={cn(
-              'min-h-[96px] w-full rounded-xl border border-black/10 px-3 py-2 text-sm',
+              'min-h-[96px] w-full rounded-xl border border-[#EEE7DF] px-3 py-2 text-sm',
               'outline-none focus-visible:ring-2 focus-visible:ring-primary/30',
             )}
             value={rejectReason}

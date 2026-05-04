@@ -29,7 +29,7 @@ export function LiveStatusBadge({ status }: { status: DriverLiveStatus }) {
     status === 'online'
       ? 'bg-emerald-500/15 text-emerald-800 border-emerald-500/25'
       : status === 'offline'
-        ? 'bg-black/[0.06] text-muted-foreground border-black/10'
+        ? 'bg-muted/50 text-muted-foreground border-[#EEE7DF]'
         : status === 'delivering'
           ? 'bg-primary/15 text-primary border-primary/25'
           : 'bg-amber-500/15 text-amber-900 border-amber-500/25'

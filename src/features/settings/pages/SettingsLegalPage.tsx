@@ -44,7 +44,7 @@ function ToastBar({ toast, onClose }: { toast: Toast | null; onClose: () => void
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -10 }}
-      className="rounded-xl border border-black/10 bg-white p-3 shadow-soft"
+      className="rounded-xl border border-[#EEE7DF] bg-white p-3 shadow-soft"
     >
       <div className="flex items-start justify-between gap-3">
         <div className="text-sm font-medium text-foreground">{toast.message}</div>
@@ -192,7 +192,7 @@ export default function SettingsLegalPage() {
               >
                 <Card
                   className={cn(
-                    'rounded-2xl border border-black/10 bg-white shadow-sm transition-shadow hover:shadow-lg',
+                    'rounded-2xl border border-[#EEE7DF] bg-white shadow-sm transition-shadow hover:shadow-lg',
                     tab === d.key && 'border-primary/20 shadow-[0_12px_32px_rgba(137,81,41,0.12)]',
                   )}
                 >
@@ -224,7 +224,7 @@ export default function SettingsLegalPage() {
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.25 }}>
             <Card className="overflow-hidden rounded-2xl">
               <CardContent className="p-0">
-                <div className="border-b border-black/10 bg-white p-4">
+                <div className="border-b border-[#EEE7DF] bg-white p-4">
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div>
                       <div className="text-sm font-semibold text-foreground">Legal Management</div>
@@ -271,7 +271,7 @@ export default function SettingsLegalPage() {
                             transition={{ duration: 0.22 }}
                             className="space-y-4"
                           >
-                            <div className="rounded-xl border border-black/10 bg-white p-4">
+                            <div className="rounded-xl border border-[#EEE7DF] bg-white p-4">
                               <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
                                 <div className="space-y-1">
                                   <div className="text-xs font-medium text-muted-foreground">Title</div>
@@ -296,7 +296,7 @@ export default function SettingsLegalPage() {
                                 <textarea
                                   value={current.content}
                                   onChange={(e) => patchCurrent({ content: e.target.value })}
-                                  className="min-h-[320px] w-full resize-none rounded-xl border border-black/10 bg-white p-3 text-sm leading-relaxed focus-visible:outline-none focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/20"
+                                  className="min-h-[320px] w-full resize-none rounded-xl border border-[#EEE7DF] bg-white p-3 text-sm leading-relaxed focus-visible:outline-none focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/20"
                                 />
                               </div>
 
@@ -337,7 +337,7 @@ export default function SettingsLegalPage() {
                 <CardTitle className="text-sm text-muted-foreground">Document info</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                <div className="rounded-xl border border-black/10 bg-white p-3 shadow-sm">
+                <div className="rounded-xl border border-[#EEE7DF] bg-white p-3 shadow-sm">
                   <div className="flex items-center justify-between gap-3">
                     <div>
                       <div className="text-xs text-muted-foreground">Publish status</div>
@@ -379,7 +379,7 @@ export default function SettingsLegalPage() {
                 This is a simplified preview (demo). Hook into a Markdown renderer later if needed.
               </DialogDescription>
             </DialogHeader>
-            <div className="max-h-[60vh] overflow-auto rounded-xl border border-black/10 bg-white p-4">
+            <div className="max-h-[60vh] overflow-auto rounded-xl border border-[#EEE7DF] bg-white p-4">
               <div className="text-sm font-semibold text-foreground">{current.title}</div>
               <div className="mt-3 whitespace-pre-wrap text-sm leading-relaxed text-foreground">
                 {current.content}

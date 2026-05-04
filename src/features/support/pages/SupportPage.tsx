@@ -219,7 +219,7 @@ function ReadStateLabel({ state }: { state: ReadState | undefined }) {
 function MessageAttachment({ a }: { a: Attachment }) {
   if (a.type === 'image') {
     return (
-      <div className="mt-2 overflow-hidden rounded-xl border border-black/10 bg-white">
+      <div className="mt-2 overflow-hidden rounded-xl border border-[#EEE7DF] bg-white">
         <img src={a.previewUrl} alt={a.name} className="h-auto w-full" />
         <div className="px-3 py-2 text-xs text-muted-foreground">{a.name}</div>
       </div>
@@ -227,7 +227,7 @@ function MessageAttachment({ a }: { a: Attachment }) {
   }
 
   return (
-    <div className="mt-2 flex items-center justify-between gap-3 rounded-xl border border-black/10 bg-white px-3 py-2">
+    <div className="mt-2 flex items-center justify-between gap-3 rounded-xl border border-[#EEE7DF] bg-white px-3 py-2">
       <div className="min-w-0">
         <div className="truncate text-xs font-medium text-foreground">{a.name}</div>
         <div className="text-[11px] text-muted-foreground">{a.sizeLabel}</div>
@@ -378,7 +378,7 @@ export default function SupportPage() {
           {/* LEFT: Conversation list */}
           <Card className="overflow-hidden">
             <CardContent className="p-0">
-              <div className="border-b border-black/10 bg-white p-4">
+              <div className="border-b border-[#EEE7DF] bg-white p-4">
                 <div className="flex items-center justify-between gap-3">
                   <div>
                     <div className="text-sm font-semibold text-foreground">Inbox</div>
@@ -434,7 +434,7 @@ export default function SupportPage() {
                                 whileHover={{ scale: 1.01, y: -2 }}
                                 onClick={() => setActiveConversation(c.id)}
                                 className={cn(
-                                  'cursor-pointer rounded-xl border border-black/10 bg-white p-3 shadow-sm transition-colors',
+                                  'cursor-pointer rounded-xl border border-[#EEE7DF] bg-white p-3 shadow-sm transition-colors',
                                   'hover:bg-primary/5',
                                   activeItem && 'border-primary/20 bg-primary/10',
                                 )}
@@ -513,7 +513,7 @@ export default function SupportPage() {
                 <div className="grid h-[72vh] grid-cols-1 lg:grid-cols-[minmax(0,1fr)_auto]">
                   <div className="flex min-w-0 flex-col">
                     {/* Header */}
-                    <div className="flex items-center justify-between gap-3 border-b border-black/10 bg-white px-4 py-3">
+                    <div className="flex items-center justify-between gap-3 border-b border-[#EEE7DF] bg-white px-4 py-3">
                       <div className="flex min-w-0 items-center gap-3">
                         <Avatar className="h-10 w-10">
                           <AvatarFallback>{getInitials(active.name)}</AvatarFallback>
@@ -588,7 +588,7 @@ export default function SupportPage() {
                                   'max-w-[88%] rounded-2xl border px-3 py-2 shadow-sm',
                                   isAdmin
                                     ? 'border-primary/20 bg-primary text-white shadow-[0_10px_30px_rgba(137,81,41,0.15)]'
-                                    : 'border-black/10 bg-white',
+                                    : 'border-[#EEE7DF] bg-white',
                                 )}
                               >
                                 {m.text && <div className="text-sm leading-relaxed">{m.text}</div>}
@@ -617,7 +617,7 @@ export default function SupportPage() {
                               exit={{ opacity: 0, y: 6 }}
                               className="flex justify-start"
                             >
-                              <div className="rounded-2xl border border-black/10 bg-white px-3 py-2 text-xs text-muted-foreground">
+                              <div className="rounded-2xl border border-[#EEE7DF] bg-white px-3 py-2 text-xs text-muted-foreground">
                                 Typing…
                               </div>
                             </motion.div>
@@ -629,7 +629,7 @@ export default function SupportPage() {
                     </div>
 
                     {/* Composer */}
-                    <div className="border-t border-black/10 bg-white px-4 py-3">
+                    <div className="border-t border-[#EEE7DF] bg-white px-4 py-3">
                       <div className="mx-auto flex max-w-3xl items-end gap-2">
                         <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
                           <Button variant="outline" size="sm" className="h-10 w-10 p-0" aria-label="Attachment">
@@ -654,7 +654,7 @@ export default function SupportPage() {
                             }}
                             placeholder="Write a message…"
                             rows={1}
-                            className="min-h-10 w-full resize-none rounded-xl border border-black/10 bg-white px-3 py-2 text-sm leading-relaxed focus-visible:outline-none focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/20"
+                            className="min-h-10 w-full resize-none rounded-xl border border-[#EEE7DF] bg-white px-3 py-2 text-sm leading-relaxed focus-visible:outline-none focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/20"
                           />
                           <div className="mt-1 text-[11px] text-muted-foreground">Enter to send • Shift+Enter for new line</div>
                         </div>
@@ -677,7 +677,7 @@ export default function SupportPage() {
                         animate={{ width: 320, opacity: 1 }}
                         exit={{ width: 0, opacity: 0 }}
                         transition={{ duration: 0.24, ease: 'easeOut' }}
-                        className="hidden border-l border-black/10 bg-white lg:block"
+                        className="hidden border-l border-[#EEE7DF] bg-white lg:block"
                       >
                         <div className="h-full overflow-auto p-4">
                           <div className="flex items-start justify-between gap-3">
@@ -697,14 +697,14 @@ export default function SupportPage() {
                               { label: 'Recent deliveries', value: active.stats.recentDeliveries },
                               { label: 'Support history', value: active.stats.supportHistory },
                             ].map((s) => (
-                              <div key={s.label} className="rounded-xl border border-black/10 bg-white p-3 shadow-sm">
+                              <div key={s.label} className="rounded-xl border border-[#EEE7DF] bg-white p-3 shadow-sm">
                                 <div className="text-[11px] text-muted-foreground">{s.label}</div>
                                 <div className="mt-0.5 text-sm font-semibold text-foreground">{s.value}</div>
                               </div>
                             ))}
                           </div>
 
-                          <div className="mt-3 rounded-xl border border-black/10 bg-white p-3 shadow-sm">
+                          <div className="mt-3 rounded-xl border border-[#EEE7DF] bg-white p-3 shadow-sm">
                             <div className="text-[11px] text-muted-foreground">Account status</div>
                             <div className="mt-1 flex items-center justify-between gap-3">
                               <Badge
@@ -722,7 +722,7 @@ export default function SupportPage() {
                             </div>
                           </div>
 
-                          <div className="mt-3 rounded-xl border border-black/10 bg-white p-3 shadow-sm">
+                          <div className="mt-3 rounded-xl border border-[#EEE7DF] bg-white p-3 shadow-sm">
                             <div className="flex items-center justify-between">
                               <div className="text-sm font-semibold text-foreground">Context</div>
                               <Badge variant="secondary" className="bg-primary/10 text-primary">Insights</Badge>

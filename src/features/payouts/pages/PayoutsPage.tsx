@@ -264,7 +264,7 @@ export default function PayoutsPage() {
                     setStatus(e.target.value as PayoutStatus | 'all')
                     setPage(1)
                   }}
-                  className="h-10 rounded-lg border border-black/10 bg-white px-3 text-sm"
+                  className="h-10 rounded-lg border border-[#EEE7DF] bg-white px-3 text-sm"
                 >
                   <option value="all">Status: all</option>
                   <option value="pending">Pending</option>
@@ -481,7 +481,7 @@ export default function PayoutsPage() {
               <CardTitle>Quick insights</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="rounded-lg border border-black/10 p-3">
+              <div className="rounded-lg border border-[#EEE7DF] p-3">
                 <div className="text-sm font-medium">Top earning vendors</div>
                 <div className="mt-3 space-y-2">
                   {insights.topVendors.map((v) => (
@@ -493,7 +493,7 @@ export default function PayoutsPage() {
                 </div>
               </div>
 
-              <div className="rounded-lg border border-black/10 p-3">
+              <div className="rounded-lg border border-[#EEE7DF] p-3">
                 <div className="text-sm font-medium">Highest payouts</div>
                 <div className="mt-3 space-y-2">
                   {insights.highestPayouts.map((p) => (
@@ -505,7 +505,7 @@ export default function PayoutsPage() {
                 </div>
               </div>
 
-              <div className="rounded-lg border border-black/10 p-3">
+              <div className="rounded-lg border border-[#EEE7DF] p-3">
                 <div className="text-sm font-medium">Recent transactions</div>
                 <div className="mt-3 space-y-2">
                   {insights.recent.map((p) => (
@@ -537,7 +537,7 @@ export default function PayoutsPage() {
           {!selected ? null : (
             <motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.2 }} className="space-y-4">
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                <div className="rounded-lg border border-black/10 p-4">
+                <div className="rounded-lg border border-[#EEE7DF] p-4">
                   <div className="text-sm font-medium">Vendor info</div>
                   <div className="mt-3 space-y-2 text-sm">
                     <div className="flex items-center justify-between">
@@ -555,7 +555,7 @@ export default function PayoutsPage() {
                   </div>
                 </div>
 
-                <div className="rounded-lg border border-black/10 p-4">
+                <div className="rounded-lg border border-[#EEE7DF] p-4">
                   <div className="text-sm font-medium">Payout info</div>
                   <div className="mt-3 space-y-2 text-sm">
                     <div className="flex items-center justify-between">
@@ -578,7 +578,7 @@ export default function PayoutsPage() {
                 </div>
               </div>
 
-              <div className="rounded-lg border border-black/10 p-4">
+              <div className="rounded-lg border border-[#EEE7DF] p-4">
                 <div className="text-sm font-medium">Orders breakdown</div>
                 <div className="mt-3 space-y-2">
                   {selected.ordersBreakdown.slice(0, 8).map((o) => (
@@ -591,7 +591,7 @@ export default function PayoutsPage() {
               </div>
 
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                <div className="rounded-lg border border-black/10 p-4">
+                <div className="rounded-lg border border-[#EEE7DF] p-4">
                   <div className="text-sm font-medium">Commission info</div>
                   {(() => {
                     const { fee, vendorEarning } = commissionFor(selected)
@@ -610,7 +610,7 @@ export default function PayoutsPage() {
                   })()}
                 </div>
 
-                <div className="rounded-lg border border-black/10 p-4">
+                <div className="rounded-lg border border-[#EEE7DF] p-4">
                   <div className="flex items-center justify-between">
                     <div className="text-sm font-medium">Risk check</div>
                     <ShieldAlert className="h-4 w-4 text-muted-foreground" />

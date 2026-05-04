@@ -258,7 +258,7 @@ export default function VendorsPage() {
           <select
             value={country}
             onChange={(e) => setCountry(e.target.value)}
-            className="h-10 rounded-lg border border-black/10 bg-white px-3 text-sm"
+            className="h-10 rounded-lg border border-[#EEE7DF] bg-white px-3 text-sm"
           >
             <option value="all">All countries</option>
             {countries.map((c) => (
@@ -580,7 +580,7 @@ export default function VendorsPage() {
               transition={{ duration: 0.2 }}
               className="space-y-4"
             >
-              <div className="rounded-lg border border-black/10 p-4">
+              <div className="rounded-lg border border-[#EEE7DF] p-4">
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <div className="text-sm font-medium">{selected.businessName}</div>
@@ -597,23 +597,23 @@ export default function VendorsPage() {
               </div>
 
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-                <div className="rounded-lg border border-black/10 p-3">
+                <div className="rounded-lg border border-[#EEE7DF] p-3">
                   <div className="text-xs text-muted-foreground">Total orders</div>
                   <div className="text-lg font-semibold">{selected.totalOrders}</div>
                 </div>
-                <div className="rounded-lg border border-black/10 p-3">
+                <div className="rounded-lg border border-[#EEE7DF] p-3">
                   <div className="text-xs text-muted-foreground">Earnings</div>
                   <div className="text-lg font-semibold">
                     <Money value={selected.earnings} />
                   </div>
                 </div>
-                <div className="rounded-lg border border-black/10 p-3">
+                <div className="rounded-lg border border-[#EEE7DF] p-3">
                   <div className="text-xs text-muted-foreground">Rating</div>
                   <div className="text-lg font-semibold">{selected.rating.toFixed(1)}</div>
                 </div>
               </div>
 
-              <div className="rounded-lg border border-black/10 p-4">
+              <div className="rounded-lg border border-[#EEE7DF] p-4">
                 <div className="text-sm font-medium">Products / Services</div>
                 <div className="mt-3 flex flex-wrap gap-2">
                   {selected.items.map((it, idx) => (
@@ -624,7 +624,7 @@ export default function VendorsPage() {
                 </div>
               </div>
 
-              <div className="rounded-lg border border-black/10 p-4">
+              <div className="rounded-lg border border-[#EEE7DF] p-4">
                 <div className="text-sm font-medium">Documents</div>
                 <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
                   <div className="flex items-center justify-between rounded-lg bg-black/[0.02] p-3">

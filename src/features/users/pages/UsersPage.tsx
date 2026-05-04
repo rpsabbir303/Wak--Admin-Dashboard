@@ -213,7 +213,7 @@ export default function UsersPage() {
               setRole(e.target.value as UserRole | 'all')
               setPage(1)
             }}
-            className="h-10 rounded-lg border border-black/10 bg-white px-3 text-sm"
+            className="h-10 rounded-lg border border-[#EEE7DF] bg-white px-3 text-sm"
           >
             <option value="all">All roles</option>
             <option value="customer">Customer</option>
@@ -226,7 +226,7 @@ export default function UsersPage() {
               setStatus(e.target.value as UserStatus | 'all')
               setPage(1)
             }}
-            className="h-10 rounded-lg border border-black/10 bg-white px-3 text-sm"
+            className="h-10 rounded-lg border border-[#EEE7DF] bg-white px-3 text-sm"
           >
             <option value="all">All status</option>
             <option value="active">Active</option>
@@ -238,7 +238,7 @@ export default function UsersPage() {
               setCountry(e.target.value)
               setPage(1)
             }}
-            className="h-10 rounded-lg border border-black/10 bg-white px-3 text-sm"
+            className="h-10 rounded-lg border border-[#EEE7DF] bg-white px-3 text-sm"
           >
             <option value="all">All countries</option>
             {countries.map((c) => (
@@ -433,7 +433,7 @@ export default function UsersPage() {
               </TabsList>
 
               <TabsContent value="overview" className="space-y-4">
-                <div className="rounded-lg border border-black/10 p-4">
+                <div className="rounded-lg border border-[#EEE7DF] p-4">
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-center gap-3">
                       <Avatar className="h-10 w-10">
@@ -474,7 +474,7 @@ export default function UsersPage() {
                   </div>
                 </div>
 
-                <div className="rounded-lg border border-black/10 p-4">
+                <div className="rounded-lg border border-[#EEE7DF] p-4">
                   <div className="text-sm font-medium">Activity summary</div>
                   <div className="mt-2 text-sm text-muted-foreground">
                     Quick snapshot across orders and bookings.
@@ -502,7 +502,7 @@ export default function UsersPage() {
                   {selected.ordersHistory.slice(0, 5).map((o) => (
                     <div
                       key={o.id}
-                      className="flex items-center justify-between rounded-lg border border-black/10 p-3"
+                      className="flex items-center justify-between rounded-lg border border-[#EEE7DF] p-3"
                     >
                       <div>
                         <div className="text-sm font-medium">{o.id}</div>
@@ -525,7 +525,7 @@ export default function UsersPage() {
                     selected.bookings.slice(0, 8).map((b, idx) => (
                       <div
                         key={`${b.serviceName}-${idx}`}
-                        className="flex items-center justify-between rounded-lg border border-black/10 p-3"
+                        className="flex items-center justify-between rounded-lg border border-[#EEE7DF] p-3"
                       >
                         <div>
                           <div className="text-sm font-medium">{b.serviceName}</div>

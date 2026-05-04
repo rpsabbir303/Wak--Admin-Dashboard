@@ -15,7 +15,7 @@ function ToastBar({ toast, onClose }: { toast: Toast | null; onClose: () => void
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -10 }}
-      className="rounded-lg border border-black/10 bg-white p-3 shadow-soft"
+      className="rounded-lg border border-[#EEE7DF] bg-white p-3 shadow-soft"
     >
       <div className="flex items-start justify-between gap-3">
         <div className="text-sm font-medium text-foreground">{toast.message}</div>

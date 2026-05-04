@@ -167,8 +167,9 @@ export default function AnalyticsPage() {
             h1 { margin: 0 0 8px; font-size: 18px; }
             .muted { color: #6b7280; font-size: 12px; margin-bottom: 16px; }
             table { width: 100%; border-collapse: collapse; }
-            th, td { border: 1px solid rgba(0,0,0,0.1); padding: 8px; font-size: 12px; text-align: left; }
-            th { background: rgba(0,0,0,0.03); }
+            th, td { border: 1px solid #EFEAE4; padding: 10px 12px; font-size: 12px; text-align: left; }
+            th { background: rgba(137,81,41,0.06); color: #374151; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; font-size: 11px; }
+            tr:nth-child(even) td { background: rgba(249,250,251,0.8); }
           </style>
         </head>
         <body>
@@ -308,7 +309,7 @@ export default function AnalyticsPage() {
                 const next = Array.from(e.currentTarget.selectedOptions).map((o) => o.value)
                 setSelectedCountries(next)
               }}
-              className="h-10 min-h-10 rounded-lg border border-black/10 bg-white px-3 py-2 text-sm"
+              className="h-10 min-h-10 rounded-lg border border-[#EEE7DF] bg-white px-3 py-2 text-sm"
             >
               {demo.countries.map((c) => (
                 <option key={c.name} value={c.name}>
@@ -320,7 +321,7 @@ export default function AnalyticsPage() {
             <select
               value={role}
               onChange={(e) => setRole(e.target.value as RoleFilter)}
-              className="h-10 rounded-lg border border-black/10 bg-white px-3 text-sm"
+              className="h-10 rounded-lg border border-[#EEE7DF] bg-white px-3 text-sm"
             >
               <option value="all">All roles</option>
               <option value="Customer">Customer</option>
@@ -446,7 +447,7 @@ export default function AnalyticsPage() {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.25, delay: idx * 0.04 }}
-                        className="flex items-center justify-between rounded-lg border border-black/10 p-3"
+                        className="flex items-center justify-between rounded-lg border border-[#EEE7DF] p-3"
                       >
                         <div className="min-w-0">
                           <div className="text-sm font-medium truncate">{v.name}</div>
@@ -508,7 +509,7 @@ export default function AnalyticsPage() {
                 { label: 'Highest revenue day', value: insights.highestRevenueDay },
                 { label: 'Top performing vendor', value: insights.topVendor },
               ].map((i) => (
-                <div key={i.label} className="rounded-lg border border-black/10 p-3">
+                <div key={i.label} className="rounded-lg border border-[#EEE7DF] p-3">
                   <div className="text-xs text-muted-foreground">{i.label}</div>
                   <div className="mt-1 text-sm font-medium">{i.value}</div>
                 </div>
@@ -526,7 +527,7 @@ export default function AnalyticsPage() {
           </DialogHeader>
           {!selectedVendor ? null : (
             <div className="space-y-3">
-              <div className="rounded-lg border border-black/10 p-3">
+              <div className="rounded-lg border border-[#EEE7DF] p-3">
                 <div className="text-sm font-medium">{selectedVendor.name}</div>
                 <div className="mt-2 flex flex-wrap gap-2">
                   <Badge variant="secondary">Revenue {formatMoney(selectedVendor.revenue)}</Badge>

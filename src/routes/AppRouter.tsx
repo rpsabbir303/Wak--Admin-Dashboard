@@ -26,7 +26,7 @@ const NotFoundPage = lazy(() => import('@/routes/NotFoundPage'))
 
 function Loading() {
   return (
-    <div className="rounded-lg border border-black/10 bg-white p-6 text-sm text-muted-foreground shadow-soft">
+    <div className="rounded-xl border border-[#EEE7DF] bg-white p-6 text-sm text-muted-foreground shadow-soft">
       Loading…
     </div>
   )

@@ -314,7 +314,7 @@ export default function DeliveryPage() {
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="rounded-lg border border-black/10 bg-white p-3 shadow-soft"
+            className="rounded-lg border border-[#EEE7DF] bg-white p-3 shadow-soft"
           >
             <div className="flex items-start justify-between gap-3">
               <div>
@@ -385,7 +385,7 @@ export default function DeliveryPage() {
                   setStatus(e.target.value as DeliveryStatus | 'all')
                   setPage(1)
                 }}
-                className="h-10 rounded-lg border border-black/10 bg-white px-3 text-sm"
+                className="h-10 rounded-lg border border-[#EEE7DF] bg-white px-3 text-sm"
               >
                 <option value="all">Status: all</option>
                 <option value="pending">Pending</option>
@@ -399,7 +399,7 @@ export default function DeliveryPage() {
                   setType(e.target.value as DeliveryType | 'all')
                   setPage(1)
                 }}
-                className="h-10 rounded-lg border border-black/10 bg-white px-3 text-sm"
+                className="h-10 rounded-lg border border-[#EEE7DF] bg-white px-3 text-sm"
               >
                 <option value="all">Type: all</option>
                 <option value="local">Local</option>
@@ -411,7 +411,7 @@ export default function DeliveryPage() {
                   setDriver(e.target.value)
                   setPage(1)
                 }}
-                className="h-10 rounded-lg border border-black/10 bg-white px-3 text-sm"
+                className="h-10 rounded-lg border border-[#EEE7DF] bg-white px-3 text-sm"
               >
                 <option value="all">Driver: all</option>
                 {driverOptions.map((d) => (
@@ -562,7 +562,7 @@ export default function DeliveryPage() {
           </DialogHeader>
           {!assignTarget ? null : (
             <div className="space-y-4">
-              <div className="rounded-lg border border-black/10 p-3">
+              <div className="rounded-lg border border-[#EEE7DF] p-3">
                 <div className="text-sm font-medium">{assignTarget.id}</div>
                 <div className="text-xs text-muted-foreground">
                   {assignTarget.pickup} → {assignTarget.drop}
@@ -571,7 +571,7 @@ export default function DeliveryPage() {
               <select
                 value={selectedDriver}
                 onChange={(e) => setSelectedDriver(e.target.value)}
-                className="h-10 w-full rounded-lg border border-black/10 bg-white px-3 text-sm"
+                className="h-10 w-full rounded-lg border border-[#EEE7DF] bg-white px-3 text-sm"
               >
                 {mockDrivers.map((d) => (
                   <option key={d.name} value={d.name}>
@@ -608,7 +608,7 @@ export default function DeliveryPage() {
           {!selected ? null : (
             <motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.2 }} className="space-y-4">
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                <div className="rounded-lg border border-black/10 p-4">
+                <div className="rounded-lg border border-[#EEE7DF] p-4">
                   <div className="text-sm font-medium">Overview</div>
                   <div className="mt-3 space-y-2 text-sm">
                     <div className="flex items-center justify-between">
@@ -626,7 +626,7 @@ export default function DeliveryPage() {
                   </div>
                 </div>
 
-                <div className="rounded-lg border border-black/10 p-4">
+                <div className="rounded-lg border border-[#EEE7DF] p-4">
                   <div className="text-sm font-medium">Driver info</div>
                   <div className="mt-3 space-y-2 text-sm">
                     <div className="flex items-center justify-between">
@@ -649,7 +649,7 @@ export default function DeliveryPage() {
                 </div>
               </div>
 
-              <div className="rounded-lg border border-black/10 p-4">
+              <div className="rounded-lg border border-[#EEE7DF] p-4">
                 <div className="text-sm font-medium">Locations</div>
                 <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 text-sm">
                   <div className="rounded-lg bg-black/[0.02] p-3">
@@ -663,7 +663,7 @@ export default function DeliveryPage() {
                 </div>
               </div>
 
-              <div className="rounded-lg border border-black/10 p-4">
+              <div className="rounded-lg border border-[#EEE7DF] p-4">
                 <div className="text-sm font-medium">Timeline</div>
                 <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-5 text-sm">
                   <Badge variant="secondary">Requested</Badge>
@@ -681,9 +681,9 @@ export default function DeliveryPage() {
                 </div>
               </div>
 
-              <div className="rounded-lg border border-black/10 p-4">
+              <div className="rounded-lg border border-[#EEE7DF] p-4">
                 <div className="text-sm font-medium">Live tracking (mock)</div>
-                <div className="mt-3 h-44 rounded-lg border border-black/10 bg-black/[0.02] grid place-items-center text-sm text-muted-foreground">
+                <div className="mt-3 h-44 rounded-lg border border-[#EEE7DF] bg-black/[0.02] grid place-items-center text-sm text-muted-foreground">
                   Map placeholder
                 </div>
               </div>

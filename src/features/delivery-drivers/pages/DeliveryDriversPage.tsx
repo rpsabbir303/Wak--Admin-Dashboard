@@ -202,7 +202,7 @@ export default function DeliveryDriversPage() {
                     key={`sk-${i}`}
                     initial={{ opacity: 0.4 }}
                     animate={{ opacity: 1 }}
-                    className="h-[104px] rounded-xl border border-black/10 bg-gradient-to-br from-muted/80 to-white shadow-soft"
+                    className="h-[104px] rounded-xl border border-[#EEE7DF] bg-gradient-to-br from-muted/80 to-white shadow-soft"
                   />
                 ))
               : statCards.map((c, i) => {
@@ -215,7 +215,7 @@ export default function DeliveryDriversPage() {
                       transition={{ delay: i * 0.06, type: 'spring', stiffness: 320, damping: 28 }}
                       whileHover={{ y: -3 }}
                     >
-                      <Card className="group overflow-hidden rounded-xl border-black/10 bg-gradient-to-br from-white via-white to-primary/[0.06] shadow-soft transition-shadow hover:shadow-md">
+                      <Card className="group overflow-hidden rounded-xl border-[#EEE7DF] bg-gradient-to-br from-white via-white to-primary/[0.06] shadow-soft transition-shadow hover:shadow-md">
                         <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
                           <CardTitle className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
                             {c.label}
@@ -235,7 +235,7 @@ export default function DeliveryDriversPage() {
           </AnimatePresence>
         </div>
 
-        <MotionCard className="rounded-xl border-black/10 shadow-soft" whileHover={{ boxShadow: '0 12px 36px rgba(16,24,40,0.08)' }}>
+        <MotionCard className="rounded-xl border-[#EEE7DF] shadow-soft" whileHover={{ boxShadow: '0 12px 36px rgba(16,24,40,0.08)' }}>
           <CardHeader className="pb-3">
             <CardTitle className="text-base">Filters</CardTitle>
           </CardHeader>
@@ -243,7 +243,7 @@ export default function DeliveryDriversPage() {
             <select
               value={account}
               onChange={(e) => setAccount(e.target.value as AccountFilter)}
-              className="h-10 w-full rounded-xl border border-black/10 bg-white px-3 text-sm lg:w-[160px]"
+              className="h-10 w-full rounded-xl border border-[#EEE7DF] bg-white px-3 text-sm lg:w-[160px]"
             >
               <option value="all">Account: All</option>
               <option value="active">Active</option>
@@ -255,7 +255,7 @@ export default function DeliveryDriversPage() {
             <select
               value={presence}
               onChange={(e) => setPresence(e.target.value as PresenceFilter)}
-              className="h-10 w-full rounded-xl border border-black/10 bg-white px-3 text-sm lg:w-[160px]"
+              className="h-10 w-full rounded-xl border border-[#EEE7DF] bg-white px-3 text-sm lg:w-[160px]"
             >
               <option value="all">Live: All</option>
               <option value="online">Online</option>
@@ -266,7 +266,7 @@ export default function DeliveryDriversPage() {
             <select
               value={verified}
               onChange={(e) => setVerified(e.target.value as VerifiedFilter)}
-              className="h-10 w-full rounded-xl border border-black/10 bg-white px-3 text-sm lg:w-[160px]"
+              className="h-10 w-full rounded-xl border border-[#EEE7DF] bg-white px-3 text-sm lg:w-[160px]"
             >
               <option value="all">Verified: All</option>
               <option value="verified">Verified</option>
@@ -275,7 +275,7 @@ export default function DeliveryDriversPage() {
             <select
               value={country}
               onChange={(e) => setCountry(e.target.value)}
-              className="h-10 w-full rounded-xl border border-black/10 bg-white px-3 text-sm lg:w-[180px]"
+              className="h-10 w-full rounded-xl border border-[#EEE7DF] bg-white px-3 text-sm lg:w-[180px]"
             >
               <option value="all">Country: All</option>
               {countries.map((c) => (
@@ -287,7 +287,7 @@ export default function DeliveryDriversPage() {
             <select
               value={earnings}
               onChange={(e) => setEarnings(e.target.value as EarningsFilter)}
-              className="h-10 w-full rounded-xl border border-black/10 bg-white px-3 text-sm lg:w-[200px]"
+              className="h-10 w-full rounded-xl border border-[#EEE7DF] bg-white px-3 text-sm lg:w-[200px]"
             >
               <option value="all">Earnings: All</option>
               <option value="lt5k">Under $5k</option>
@@ -297,7 +297,7 @@ export default function DeliveryDriversPage() {
             <select
               value={rating}
               onChange={(e) => setRating(e.target.value as RatingFilter)}
-              className="h-10 w-full rounded-xl border border-black/10 bg-white px-3 text-sm lg:w-[180px]"
+              className="h-10 w-full rounded-xl border border-[#EEE7DF] bg-white px-3 text-sm lg:w-[180px]"
             >
               <option value="all">Rating: All</option>
               <option value="45">4.5+ stars</option>
@@ -310,16 +310,16 @@ export default function DeliveryDriversPage() {
           </CardContent>
         </MotionCard>
 
-        <Card className="rounded-xl border-black/10 shadow-soft">
+        <Card className="rounded-xl border-[#EEE7DF] shadow-soft">
           <CardHeader className="flex flex-row flex-wrap items-center justify-between gap-2 pb-3">
             <CardTitle className="text-base">Driver roster</CardTitle>
             <div className="text-sm text-muted-foreground">{filtered.length} shown</div>
           </CardHeader>
           <CardContent className="p-0">
-            <div className="hidden md:block overflow-x-auto">
+            <div className="hidden md:block">
               <Table>
                 <TableHeader>
-                  <TableRow className="border-black/10 hover:bg-transparent">
+                  <TableRow className="hover:bg-transparent">
                     <TableHead>Driver</TableHead>
                     <TableHead>Country</TableHead>
                     <TableHead>Vehicle</TableHead>
@@ -347,15 +347,11 @@ export default function DeliveryDriversPage() {
                           setClickedId(d.id)
                           navigate(`/admin/vendors/delivery-drivers/${encodeURIComponent(d.id)}`)
                         }}
-                        whileHover={{ backgroundColor: 'rgba(137,81,41,0.05)' }}
-                        className={cn(
-                          'cursor-pointer border-black/5',
-                          clickedId === d.id && 'bg-primary/[0.07]',
-                        )}
+                        className={cn('cursor-pointer', clickedId === d.id && 'bg-primary/[0.07]')}
                       >
                         <TableCell>
                           <div className="flex items-center gap-3">
-                            <Avatar className="h-10 w-10 rounded-xl border border-black/10">
+                            <Avatar className="h-10 w-10 rounded-xl border border-[#EEE7DF]">
                               <AvatarImage src={d.avatarUrl} alt="" />
                               <AvatarFallback>{getInitials(d.name)}</AvatarFallback>
                             </Avatar>
@@ -384,7 +380,7 @@ export default function DeliveryDriversPage() {
                         <TableCell className="text-right" onClick={(e) => e.stopPropagation()}>
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                              <Button variant="outline" size="icon" className="h-9 w-9 rounded-xl border-black/15">
+                              <Button variant="outline" size="icon" className="h-9 w-9 rounded-xl border-[#DCCBBC]/70">
                                 <MoreHorizontal className="h-4 w-4" />
                               </Button>
                             </DropdownMenuTrigger>
@@ -510,7 +506,7 @@ export default function DeliveryDriversPage() {
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-center gap-3">
-                      <Avatar className="h-11 w-11 rounded-xl border border-black/10">
+                      <Avatar className="h-11 w-11 rounded-xl border border-[#EEE7DF]">
                         <AvatarImage src={d.avatarUrl} alt="" />
                         <AvatarFallback>{getInitials(d.name)}</AvatarFallback>
                       </Avatar>
@@ -550,7 +546,7 @@ export default function DeliveryDriversPage() {
           </DialogHeader>
           <textarea
             className={cn(
-              'min-h-[100px] w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-sm',
+              'min-h-[100px] w-full rounded-xl border border-[#EEE7DF] bg-white px-3 py-2 text-sm',
               'outline-none focus-visible:ring-2 focus-visible:ring-primary/30',
             )}
             placeholder="Reason for rejection…"

@@ -353,7 +353,7 @@ export default function ServicesPage() {
                       setCategory(e.target.value)
                       setPage(1)
                     }}
-                    className="h-10 rounded-lg border border-black/10 bg-white px-3 text-sm"
+                    className="h-10 rounded-lg border border-[#EEE7DF] bg-white px-3 text-sm"
                   >
                     <option value="all">All categories</option>
                     {categories.map((c) => (
@@ -369,7 +369,7 @@ export default function ServicesPage() {
                       setCountry(e.target.value)
                       setPage(1)
                     }}
-                    className="h-10 rounded-lg border border-black/10 bg-white px-3 text-sm"
+                    className="h-10 rounded-lg border border-[#EEE7DF] bg-white px-3 text-sm"
                   >
                     <option value="all">All countries</option>
                     {countries.map((c) => (
@@ -385,7 +385,7 @@ export default function ServicesPage() {
                       setMinRating(e.target.value)
                       setPage(1)
                     }}
-                    className="h-10 rounded-lg border border-black/10 bg-white px-3 text-sm"
+                    className="h-10 rounded-lg border border-[#EEE7DF] bg-white px-3 text-sm"
                   >
                     <option value="all">Any rating</option>
                     <option value="4">4+</option>
@@ -398,7 +398,7 @@ export default function ServicesPage() {
                       setPricingType(e.target.value as PricingType | 'all')
                       setPage(1)
                     }}
-                    className="h-10 rounded-lg border border-black/10 bg-white px-3 text-sm"
+                    className="h-10 rounded-lg border border-[#EEE7DF] bg-white px-3 text-sm"
                   >
                     <option value="all">All pricing</option>
                     <option value="fixed">Fixed</option>
@@ -634,7 +634,7 @@ export default function ServicesPage() {
               className="space-y-4"
             >
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                <div className="rounded-lg border border-black/10 p-4">
+                <div className="rounded-lg border border-[#EEE7DF] p-4">
                   <div className="text-sm font-medium">Basic info</div>
                   <div className="mt-3 space-y-2 text-sm">
                     <div className="flex items-center justify-between gap-3">
@@ -660,7 +660,7 @@ export default function ServicesPage() {
                   </div>
                 </div>
 
-                <div className="rounded-lg border border-black/10 p-4">
+                <div className="rounded-lg border border-[#EEE7DF] p-4">
                   <div className="text-sm font-medium">Pricing</div>
                   <div className="mt-3 grid grid-cols-2 gap-3 text-sm">
                     <div className="rounded-lg bg-black/[0.02] p-3">
@@ -709,28 +709,28 @@ export default function ServicesPage() {
               </div>
 
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-                <div className="rounded-lg border border-black/10 p-4">
+                <div className="rounded-lg border border-[#EEE7DF] p-4">
                   <div className="text-xs text-muted-foreground">Total bookings</div>
                   <div className="text-xl font-semibold">{selected.bookings}</div>
                 </div>
-                <div className="rounded-lg border border-black/10 p-4">
+                <div className="rounded-lg border border-[#EEE7DF] p-4">
                   <div className="text-xs text-muted-foreground">Rating</div>
                   <div className="text-xl font-semibold">
                     {selected.rating === 0 ? '—' : selected.rating.toFixed(1)}
                   </div>
                 </div>
-                <div className="rounded-lg border border-black/10 p-4">
+                <div className="rounded-lg border border-[#EEE7DF] p-4">
                   <div className="text-xs text-muted-foreground">Reviews</div>
                   <div className="text-xl font-semibold">{selected.reviewsCount}</div>
                 </div>
               </div>
 
-              <div className="rounded-lg border border-black/10 p-4">
+              <div className="rounded-lg border border-[#EEE7DF] p-4">
                 <div className="text-sm font-medium">Description</div>
                 <div className="mt-2 text-sm text-muted-foreground">{selected.description}</div>
               </div>
 
-              <div className="rounded-lg border border-black/10 p-4">
+              <div className="rounded-lg border border-[#EEE7DF] p-4">
                 <div className="text-sm font-medium">Booking insights</div>
                 <div className="mt-2 text-sm text-muted-foreground">
                   Recent bookings for this service.
@@ -742,7 +742,7 @@ export default function ServicesPage() {
                     selected.recentBookings.slice(0, 5).map((b) => (
                       <div
                         key={b.id}
-                        className="flex items-center justify-between rounded-lg border border-black/10 p-3"
+                        className="flex items-center justify-between rounded-lg border border-[#EEE7DF] p-3"
                       >
                         <div>
                           <div className="text-sm font-medium">{b.id}</div>
@@ -867,7 +867,7 @@ function CategoryManager({
           categories.map((c) => (
             <div
               key={c}
-              className="flex items-center justify-between rounded-lg border border-black/10 p-3"
+              className="flex items-center justify-between rounded-lg border border-[#EEE7DF] p-3"
             >
               {edit?.original === c ? (
                 <div className="flex w-full items-center gap-2">

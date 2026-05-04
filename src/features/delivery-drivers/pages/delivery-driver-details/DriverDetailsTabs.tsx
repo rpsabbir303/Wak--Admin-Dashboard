@@ -141,7 +141,7 @@ export function DriverDetailsTabs({
 
       <TabsContent value="overview" className="mt-0 space-y-4">
         <div className="grid gap-4 lg:grid-cols-3">
-          <Card className="rounded-xl border-black/10 shadow-soft lg:col-span-2">
+          <Card className="rounded-xl border-[#EEE7DF] shadow-soft lg:col-span-2">
             <CardHeader>
               <CardTitle className="text-base">Summary</CardTitle>
             </CardHeader>
@@ -153,7 +153,7 @@ export function DriverDetailsTabs({
               <p>Wallet {formatMoney(driver.walletBalance)} · Avg {driver.avgDeliveryMinutes || '—'} min</p>
             </CardContent>
           </Card>
-          <Card className="rounded-xl border-black/10 shadow-soft">
+          <Card className="rounded-xl border-[#EEE7DF] shadow-soft">
             <CardHeader>
               <CardTitle className="text-base">Profile</CardTitle>
             </CardHeader>
@@ -198,7 +198,7 @@ export function DriverDetailsTabs({
           </Card>
         )}
         <div className="grid gap-4 md:grid-cols-2">
-          <Card className="rounded-xl border-black/10 shadow-soft">
+          <Card className="rounded-xl border-[#EEE7DF] shadow-soft">
             <CardHeader>
               <CardTitle className="text-base">Weekly activity</CardTitle>
             </CardHeader>
@@ -214,7 +214,7 @@ export function DriverDetailsTabs({
               </ResponsiveContainer>
             </CardContent>
           </Card>
-          <Card className="rounded-xl border-black/10 shadow-soft">
+          <Card className="rounded-xl border-[#EEE7DF] shadow-soft">
             <CardHeader>
               <CardTitle className="text-base">Satisfaction</CardTitle>
             </CardHeader>
@@ -248,7 +248,7 @@ export function DriverDetailsTabs({
           </Button>
         </div>
         <div className="grid gap-4 lg:grid-cols-2">
-          <Card className="rounded-xl border-black/10 shadow-soft lg:col-span-2">
+          <Card className="rounded-xl border-[#EEE7DF] shadow-soft lg:col-span-2">
             <CardHeader>
               <CardTitle className="text-base">Weekly earnings</CardTitle>
             </CardHeader>
@@ -264,7 +264,7 @@ export function DriverDetailsTabs({
               </ResponsiveContainer>
             </CardContent>
           </Card>
-          <Card className="rounded-xl border-black/10 shadow-soft">
+          <Card className="rounded-xl border-[#EEE7DF] shadow-soft">
             <CardHeader>
               <CardTitle className="text-base">Monthly</CardTitle>
             </CardHeader>
@@ -280,7 +280,7 @@ export function DriverDetailsTabs({
               </ResponsiveContainer>
             </CardContent>
           </Card>
-          <Card className="rounded-xl border-black/10 shadow-soft">
+          <Card className="rounded-xl border-[#EEE7DF] shadow-soft">
             <CardHeader>
               <CardTitle className="text-base">Yearly</CardTitle>
             </CardHeader>
@@ -304,7 +304,7 @@ export function DriverDetailsTabs({
           </Card>
         </div>
         <div className="grid gap-4 md:grid-cols-2">
-          <Card className="rounded-xl border-black/10 shadow-soft">
+          <Card className="rounded-xl border-[#EEE7DF] shadow-soft">
             <CardHeader>
               <CardTitle className="text-sm">Payouts</CardTitle>
             </CardHeader>
@@ -333,7 +333,7 @@ export function DriverDetailsTabs({
               </Table>
             </CardContent>
           </Card>
-          <Card className="rounded-xl border-black/10 shadow-soft">
+          <Card className="rounded-xl border-[#EEE7DF] shadow-soft">
             <CardHeader>
               <CardTitle className="text-sm">Commission</CardTitle>
             </CardHeader>
@@ -379,7 +379,7 @@ export function DriverDetailsTabs({
                 setDelStatus(e.target.value as DeliveryRowStatus | 'all')
                 setDelPage(1)
               }}
-              className="h-10 rounded-xl border border-black/10 bg-white px-3 text-sm"
+              className="h-10 rounded-xl border border-[#EEE7DF] bg-white px-3 text-sm"
             >
               <option value="all">All</option>
               <option value="completed">Completed</option>
@@ -393,7 +393,7 @@ export function DriverDetailsTabs({
             </Button>
           </div>
         </div>
-        <Card className="rounded-xl border-black/10 shadow-soft">
+        <Card className="rounded-xl border-[#EEE7DF] shadow-soft">
           <CardContent className="p-0 overflow-x-auto">
             <Table>
               <TableHeader>
@@ -448,7 +448,7 @@ export function DriverDetailsTabs({
 
       <TabsContent value="reviews" className="mt-0 space-y-4">
         <div className="grid gap-4 md:grid-cols-3">
-          <Card className="rounded-xl border-black/10 shadow-soft">
+          <Card className="rounded-xl border-[#EEE7DF] shadow-soft">
             <CardHeader>
               <CardTitle className="text-sm">Average</CardTitle>
             </CardHeader>
@@ -459,7 +459,7 @@ export function DriverDetailsTabs({
               {driver.ratingCount > 0 && <StarRow rating={driver.rating} />}
             </CardContent>
           </Card>
-          <Card className="rounded-xl border-black/10 shadow-soft md:col-span-2">
+          <Card className="rounded-xl border-[#EEE7DF] shadow-soft md:col-span-2">
             <CardHeader>
               <CardTitle className="text-sm">Distribution</CardTitle>
             </CardHeader>
@@ -477,7 +477,7 @@ export function DriverDetailsTabs({
         </div>
         <div className="grid gap-3 md:grid-cols-2">
           {driver.reviews.map((r) => (
-            <Card key={r.id} className="rounded-xl border-black/10 shadow-soft">
+            <Card key={r.id} className="rounded-xl border-[#EEE7DF] shadow-soft">
               <CardContent className="flex gap-3 pt-4">
                 <Avatar>
                   <AvatarImage src={r.customerAvatar} alt="" />
@@ -500,7 +500,7 @@ export function DriverDetailsTabs({
       <TabsContent value="documents" className="mt-0">
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {docs.map((doc) => (
-            <Card key={doc.id} className="overflow-hidden rounded-xl border-black/10 shadow-soft">
+            <Card key={doc.id} className="overflow-hidden rounded-xl border-[#EEE7DF] shadow-soft">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 py-3">
                 <CardTitle className="text-sm font-medium">{doc.label}</CardTitle>
                 <Badge variant={doc.status === 'approved' ? 'success' : doc.status === 'rejected' ? 'danger' : 'warning'}>
@@ -536,7 +536,7 @@ export function DriverDetailsTabs({
       </TabsContent>
 
       <TabsContent value="activity" className="mt-0">
-        <Card className="rounded-xl border-black/10 shadow-soft">
+        <Card className="rounded-xl border-[#EEE7DF] shadow-soft">
           <CardContent className="p-6">
             <ul className="space-y-4">
               {driver.activityLogs.map((log, idx) => (
@@ -545,7 +545,7 @@ export function DriverDetailsTabs({
                   initial={{ opacity: 0, x: -6 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: idx * 0.03 }}
-                  className="rounded-xl border border-black/10 bg-white px-4 py-3 text-sm shadow-sm"
+                  className="rounded-xl border border-[#EEE7DF] bg-white px-4 py-3 text-sm shadow-sm"
                 >
                   <div className="flex justify-between gap-2">
                     <span className="font-medium">{log.title}</span>

@@ -82,3 +82,27 @@ textarea:focus-visible {
   background-clip: padding-box;
 }
 
+/* Data tables: thin neutral scrollbar (horizontal + vertical) */
+.admin-table-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(212 208 200) transparent;
+}
+
+.admin-table-scroll::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.admin-table-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.admin-table-scroll::-webkit-scrollbar-thumb {
+  background: #d7c2ae;
+  border-radius: 9999px;
+}
+
+.admin-table-scroll::-webkit-scrollbar-thumb:hover {
+  background: #c7ad96;
+}
+

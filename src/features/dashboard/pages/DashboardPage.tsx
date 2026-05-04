@@ -432,7 +432,7 @@ export default function DashboardPage() {
                 ) : (
                   <div className="space-y-3">
                     {visiblePendingVendors.slice(0, 5).map((v) => (
-                      <div key={v.id} className="rounded-lg border border-black/10 p-3 transition-shadow hover:shadow-sm">
+                      <div key={v.id} className="rounded-lg border border-[#EEE7DF] p-3 transition-shadow hover:shadow-sm">
                         <div className="flex items-start justify-between gap-3">
                           <div>
                             <div className="text-sm font-medium">{v.businessName}</div>
@@ -561,7 +561,7 @@ export default function DashboardPage() {
                       key={a.id}
                       to={a.href}
                       variants={motionVariants.feedItem}
-                      className="flex items-start justify-between gap-3 rounded-lg border border-black/10 p-3 transition-colors hover:bg-black/[0.02]"
+                      className="flex items-start justify-between gap-3 rounded-lg border border-[#EEE7DF] p-3 transition-colors hover:bg-black/[0.02]"
                     >
                       <div className="text-sm font-medium">{a.title}</div>
                       <div className="shrink-0 text-xs text-muted-foreground">{a.meta}</div>
@@ -581,7 +581,7 @@ export default function DashboardPage() {
             </CardHeader>
             <CardContent className="grid grid-cols-1 gap-3 md:grid-cols-2">
               {safe.activeDeliveries.slice(0, 6).map((d) => (
-                <div key={d.id} className="rounded-lg border border-black/10 p-3 transition-shadow hover:shadow-sm">
+                <div key={d.id} className="rounded-lg border border-[#EEE7DF] p-3 transition-shadow hover:shadow-sm">
                   <div className="flex items-center justify-between">
                     <div className="text-sm font-medium">Delivery #{d.id}</div>
                     <Badge

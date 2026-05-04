@@ -331,7 +331,7 @@ export default function ProductsPage() {
                       setCategory(e.target.value)
                       setPage(1)
                     }}
-                    className="h-10 rounded-lg border border-black/10 bg-white px-3 text-sm"
+                    className="h-10 rounded-lg border border-[#EEE7DF] bg-white px-3 text-sm"
                   >
                     <option value="all">All categories</option>
                     {categories.map((c) => (
@@ -347,7 +347,7 @@ export default function ProductsPage() {
                       setStatus(e.target.value as ProductStatus | 'all')
                       setPage(1)
                     }}
-                    className="h-10 rounded-lg border border-black/10 bg-white px-3 text-sm"
+                    className="h-10 rounded-lg border border-[#EEE7DF] bg-white px-3 text-sm"
                   >
                     <option value="all">All status</option>
                     <option value="active">Active</option>
@@ -361,7 +361,7 @@ export default function ProductsPage() {
                       setCountry(e.target.value)
                       setPage(1)
                     }}
-                    className="h-10 rounded-lg border border-black/10 bg-white px-3 text-sm"
+                    className="h-10 rounded-lg border border-[#EEE7DF] bg-white px-3 text-sm"
                   >
                     <option value="all">All countries</option>
                     {countries.map((c) => (
@@ -420,7 +420,7 @@ export default function ProductsPage() {
                         applyBulkCategory(nextCategory)
                         e.currentTarget.value = ''
                       }}
-                      className="h-9 rounded-lg border border-black/10 bg-white px-3 text-sm disabled:opacity-50"
+                      className="h-9 rounded-lg border border-[#EEE7DF] bg-white px-3 text-sm disabled:opacity-50"
                     >
                       <option value="">Change category…</option>
                       {categories.map((c) => (
@@ -642,7 +642,7 @@ export default function ProductsPage() {
           {!selected ? null : (
             <motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.2 }} className="space-y-4">
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                <div className="rounded-lg border border-black/10 p-4">
+                <div className="rounded-lg border border-[#EEE7DF] p-4">
                   <div className="text-sm font-medium">Basic info</div>
                   <div className="mt-3 space-y-2 text-sm">
                     {editMode ? (
@@ -659,7 +659,7 @@ export default function ProductsPage() {
                         <select
                           value={selected.category}
                           onChange={(e) => setSelected({ ...selected, category: e.target.value })}
-                          className="h-10 w-full rounded-lg border border-black/10 bg-white px-3 text-sm"
+                          className="h-10 w-full rounded-lg border border-[#EEE7DF] bg-white px-3 text-sm"
                         >
                           {categories.map((c) => (
                             <option key={c} value={c}>
@@ -713,7 +713,7 @@ export default function ProductsPage() {
                   </div>
                 </div>
 
-                <div className="rounded-lg border border-black/10 p-4">
+                <div className="rounded-lg border border-[#EEE7DF] p-4">
                   <div className="text-sm font-medium">Sales info</div>
                   <div className="mt-3 grid grid-cols-2 gap-3 text-sm">
                     <div className="rounded-lg bg-black/[0.02] p-3">
@@ -760,14 +760,14 @@ export default function ProductsPage() {
                 </div>
               </div>
 
-              <div className="rounded-lg border border-black/10 p-4">
+              <div className="rounded-lg border border-[#EEE7DF] p-4">
                 <div className="text-sm font-medium">Description</div>
                 <div className="mt-2 text-sm text-muted-foreground">
                   {editMode ? (
                     <textarea
                       value={selected.description}
                       onChange={(e) => setSelected({ ...selected, description: e.target.value })}
-                      className="min-h-24 w-full rounded-lg border border-black/10 bg-white p-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+                      className="min-h-24 w-full rounded-lg border border-[#EEE7DF] bg-white p-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
                     />
                   ) : (
                     selected.description
@@ -775,13 +775,13 @@ export default function ProductsPage() {
                 </div>
               </div>
 
-              <div className="rounded-lg border border-black/10 p-4">
+              <div className="rounded-lg border border-[#EEE7DF] p-4">
                 <div className="text-sm font-medium">Images</div>
                 <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3">
                   {selected.images.map((c, idx) => (
                     <div
                       key={`${selected.id}-img-${idx}`}
-                      className="h-28 rounded-lg border border-black/10"
+                      className="h-28 rounded-lg border border-[#EEE7DF]"
                       style={{ background: c }}
                     />
                   ))}
@@ -973,7 +973,7 @@ function CategoryManager({
           categories.map((c) => (
             <div
               key={c}
-              className="flex items-center justify-between rounded-lg border border-black/10 p-3"
+              className="flex items-center justify-between rounded-lg border border-[#EEE7DF] p-3"
             >
               {edit?.original === c ? (
                 <div className="flex w-full items-center gap-2">

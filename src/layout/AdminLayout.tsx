@@ -77,7 +77,7 @@ function adminBreadcrumbItems(pathname: string): { label: string; to?: string }[
 function SidebarTooltip({ label, collapsed }: { label: string; collapsed: boolean }) {
   if (!collapsed) return null
   return (
-    <span className="pointer-events-none absolute left-full top-1/2 z-50 -translate-y-1/2 whitespace-nowrap rounded-lg border border-black/10 bg-white px-2.5 py-1 text-xs text-foreground shadow-soft opacity-0 transition-opacity group-hover:opacity-100 ml-2">
+    <span className="pointer-events-none absolute left-full top-1/2 z-50 -translate-y-1/2 whitespace-nowrap rounded-lg border border-[#EEE7DF] bg-white px-2.5 py-1 text-xs text-foreground shadow-soft opacity-0 transition-opacity group-hover:opacity-100 ml-2">
       {label}
     </span>
   )
@@ -210,7 +210,7 @@ export function AdminLayout() {
 
       <motion.aside
         className={cn(
-          'fixed inset-y-0 left-0 z-50 h-screen border-r border-black/10 bg-[#faf9f7] shadow-sm flex flex-col overflow-hidden',
+          'fixed inset-y-0 left-0 z-50 h-screen border-r border-[#EEE7DF] bg-[#faf9f7] shadow-sm flex flex-col overflow-hidden',
           'supports-[backdrop-filter]:bg-[#faf9f7]/90 supports-[backdrop-filter]:backdrop-blur',
         )}
         animate={{
@@ -683,10 +683,10 @@ export function AdminLayout() {
         </div>
 
         {/* Bottom user card */}
-        <div className="flex-shrink-0 px-3 pb-3 pt-3 border-t border-black/10">
+        <div className="flex-shrink-0 px-3 pb-3 pt-3 border-t border-[#EEE7DF]">
           <motion.div
             whileHover={{ y: -1 }}
-            className="rounded-2xl border border-black/10 bg-white/60 p-3 shadow-soft"
+            className="rounded-2xl border border-[#EEE7DF] bg-white/60 p-3 shadow-soft"
           >
             <div
               className={cn(
@@ -728,7 +728,7 @@ export function AdminLayout() {
       </motion.aside>
 
       <div style={{ marginLeft: isMobile ? 0 : sidebarWidth }}>
-        <header className="sticky top-0 z-30 border-b border-black/10 bg-white/80 backdrop-blur">
+        <header className="sticky top-0 z-30 border-b border-[#EEE7DF] bg-white/80 backdrop-blur">
           <div className="flex h-16 items-center justify-between px-4">
             <div className="flex items-center gap-3">
               <Button
@@ -740,7 +740,7 @@ export function AdminLayout() {
               >
                 <PanelLeftOpen className="h-5 w-5" />
               </Button>
-              <div className="hidden md:flex items-center gap-2 rounded-lg border border-black/10 bg-white px-3 py-2 text-sm text-muted-foreground w-[360px]">
+              <div className="hidden md:flex items-center gap-2 rounded-lg border border-[#EEE7DF] bg-white px-3 py-2 text-sm text-muted-foreground w-[360px]">
                 <Search className="h-4 w-4" />
                 <Input
                   className="h-auto border-0 p-0 shadow-none focus-visible:ring-0"
