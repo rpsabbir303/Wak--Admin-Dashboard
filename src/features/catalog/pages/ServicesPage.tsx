@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { motion } from 'framer-motion'
-import { Eye, Trash2 } from 'lucide-react'
+import { Eye, Power, Trash2 } from 'lucide-react'
 
 import { PageShell } from '@/components/PageShell'
 import { Badge } from '@/components/ui/badge'
@@ -125,9 +125,9 @@ function ratingVariant(rating: number): 'success' | 'warning' | 'secondary' {
 
 function StatusBadge({ status }: { status: ServiceStatus }) {
   return status === 'active' ? (
-    <Badge variant="success">active</Badge>
+    <Badge className="rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-0.5 text-xs font-medium text-emerald-700">active</Badge>
   ) : (
-    <Badge variant="secondary">inactive</Badge>
+    <Badge className="rounded-full border border-zinc-200 bg-zinc-100 px-2.5 py-0.5 text-xs font-medium text-zinc-700">inactive</Badge>
   )
 }
 
@@ -309,9 +309,9 @@ export default function ServicesPage() {
               transition={{ duration: 0.35, delay: idx * 0.05 }}
               whileHover={{ y: -4 }}
             >
-              <Card className="transition-shadow hover:shadow-lg">
+              <Card className="h-full rounded-2xl border border-[#89512914] bg-white transition-shadow hover:shadow-[0_10px_24px_rgba(137,81,41,0.10)]">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm text-muted-foreground">{s.label}</CardTitle>
+                  <CardTitle className="text-sm font-medium text-muted-foreground">{s.label}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-semibold text-foreground">{s.value}</div>
@@ -328,7 +328,7 @@ export default function ServicesPage() {
               {filtered.length} results • {selectedCount} selected
             </div>
           </CardHeader>
-          <CardContent className="space-y-3">
+          <CardContent className="space-y-4">
             <Tabs
               value={tab}
               onValueChange={(v) => {
@@ -345,15 +345,15 @@ export default function ServicesPage() {
                 <TabsTrigger value="no_bookings">No Bookings</TabsTrigger>
               </TabsList>
 
-              <TabsContent value={tab} className="mt-3 space-y-3">
-                <div className="grid grid-cols-1 gap-2 md:grid-cols-4">
+              <TabsContent value={tab} className="mt-3 space-y-4">
+                <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-4">
                   <select
                     value={category}
                     onChange={(e) => {
                       setCategory(e.target.value)
                       setPage(1)
                     }}
-                    className="h-10 rounded-lg border border-[#EEE7DF] bg-white px-3 text-sm"
+                    className="h-10 w-full rounded-lg border border-[#EEE7DF] bg-white px-3 text-sm"
                   >
                     <option value="all">All categories</option>
                     {categories.map((c) => (
@@ -369,7 +369,7 @@ export default function ServicesPage() {
                       setCountry(e.target.value)
                       setPage(1)
                     }}
-                    className="h-10 rounded-lg border border-[#EEE7DF] bg-white px-3 text-sm"
+                    className="h-10 w-full rounded-lg border border-[#EEE7DF] bg-white px-3 text-sm"
                   >
                     <option value="all">All countries</option>
                     {countries.map((c) => (
@@ -385,7 +385,7 @@ export default function ServicesPage() {
                       setMinRating(e.target.value)
                       setPage(1)
                     }}
-                    className="h-10 rounded-lg border border-[#EEE7DF] bg-white px-3 text-sm"
+                    className="h-10 w-full rounded-lg border border-[#EEE7DF] bg-white px-3 text-sm"
                   >
                     <option value="all">Any rating</option>
                     <option value="4">4+</option>
@@ -398,7 +398,7 @@ export default function ServicesPage() {
                       setPricingType(e.target.value as PricingType | 'all')
                       setPage(1)
                     }}
-                    className="h-10 rounded-lg border border-[#EEE7DF] bg-white px-3 text-sm"
+                    className="h-10 w-full rounded-lg border border-[#EEE7DF] bg-white px-3 text-sm"
                   >
                     <option value="all">All pricing</option>
                     <option value="fixed">Fixed</option>
@@ -406,11 +406,12 @@ export default function ServicesPage() {
                   </select>
                 </div>
 
-                <div className="flex flex-wrap items-center justify-between gap-2">
+                <div className="flex flex-wrap items-center justify-between gap-3">
                   <div className="flex items-center gap-2">
                     <Button
                       size="sm"
                       variant="outline"
+                      className="h-9 px-3"
                       disabled={selectedIds.size === 0}
                       onClick={() => {
                         setServices((prev) =>
@@ -426,6 +427,7 @@ export default function ServicesPage() {
                     <Button
                       size="sm"
                       variant="outline"
+                      className="h-9 px-3"
                       disabled={selectedIds.size === 0}
                       onClick={() => {
                         setServices((prev) => prev.filter((s) => !selectedIds.has(s.id)))
@@ -439,6 +441,7 @@ export default function ServicesPage() {
                   <Button
                     size="sm"
                     variant="ghost"
+                    className="h-9 px-3"
                     disabled={selectedIds.size === 0}
                     onClick={() => setSelectedIds(new Set())}
                   >
@@ -446,10 +449,11 @@ export default function ServicesPage() {
                   </Button>
                 </div>
 
-                <Table>
+                <div className="w-full overflow-x-auto">
+                <Table className="w-full">
                   <TableHeader>
                     <TableRow>
-                      <TableHead className="w-10">
+                      <TableHead className="w-10 py-2 text-center text-xs font-medium uppercase tracking-wide text-[#895129b3]">
                         <input
                           type="checkbox"
                           checked={allVisibleSelected}
@@ -463,18 +467,19 @@ export default function ServicesPage() {
                             })
                           }}
                           aria-label="Select all"
+                          className="h-4 w-4 align-middle"
                         />
                       </TableHead>
-                      <TableHead>Service</TableHead>
-                      <TableHead>Provider</TableHead>
-                      <TableHead>Category</TableHead>
-                      <TableHead>Price</TableHead>
-                      <TableHead>Bookings</TableHead>
-                      <TableHead>Rating</TableHead>
-                      <TableHead>Country</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Created</TableHead>
-                      <TableHead className="text-right">Actions</TableHead>
+                      <TableHead className="min-w-[220px] py-2 text-xs font-medium uppercase tracking-wide text-[#895129b3]">Service</TableHead>
+                      <TableHead className="w-[150px] py-2 text-xs font-medium uppercase tracking-wide text-[#895129b3]">Provider</TableHead>
+                      <TableHead className="w-[140px] py-2 text-xs font-medium uppercase tracking-wide text-[#895129b3]">Category</TableHead>
+                      <TableHead className="w-[120px] py-2 text-right text-xs font-medium uppercase tracking-wide text-[#895129b3]">Price</TableHead>
+                      <TableHead className="w-[90px] py-2 text-center text-xs font-medium uppercase tracking-wide text-[#895129b3]">Bookings</TableHead>
+                      <TableHead className="w-[90px] py-2 text-center text-xs font-medium uppercase tracking-wide text-[#895129b3]">Rating</TableHead>
+                      <TableHead className="w-[90px] py-2 text-center text-xs font-medium uppercase tracking-wide text-[#895129b3]">Country</TableHead>
+                      <TableHead className="w-[120px] py-2 text-xs font-medium uppercase tracking-wide text-[#895129b3]">Status</TableHead>
+                      <TableHead className="w-[120px] py-2 text-xs font-medium uppercase tracking-wide text-[#895129b3]">Created</TableHead>
+                      <TableHead className="w-[140px] py-2 text-right text-xs font-medium uppercase tracking-wide text-[#895129b3]">Actions</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -491,57 +496,77 @@ export default function ServicesPage() {
                           whileHover={{ scale: 1.01 }}
                           transition={{ duration: 0.12 }}
                         >
-                          <TableCell>
+                          <TableCell className="py-3 align-middle text-center">
                             <input
                               type="checkbox"
                               checked={selectedIds.has(s.id)}
                               onChange={(e) => toggleSelected(s.id, e.target.checked)}
                               aria-label={`Select ${s.id}`}
+                              className="h-4 w-4 align-middle"
                             />
                           </TableCell>
-                          <TableCell>
+                          <TableCell className="py-3 align-middle">
                             <div className="flex items-start gap-3">
                               <div className="grid h-9 w-9 place-items-center rounded-lg bg-primary/10">
                                 <span className="text-xs font-semibold text-primary">S</span>
                               </div>
-                              <div className="leading-tight">
-                                <div className="font-medium">{s.title}</div>
+                              <div className="min-w-0 leading-tight">
+                                <div
+                                  className="max-w-[320px] overflow-hidden text-sm font-medium leading-5 text-foreground"
+                                  style={{
+                                    display: '-webkit-box',
+                                    WebkitLineClamp: 2,
+                                    WebkitBoxOrient: 'vertical',
+                                  }}
+                                >
+                                  {s.title}
+                                </div>
+                                <div className="mt-1 text-xs text-muted-foreground">{s.id}</div>
                                 <div className="mt-1 flex flex-wrap items-center gap-2">
-                                  {s.rating > 0 && s.rating < 4 && (
-                                    <Badge variant="warning">⚠ Low Rating</Badge>
+                                  {s.bookings === 0 && (
+                                    <Badge className="rounded-full border border-red-200 bg-red-50 px-2.5 py-0.5 text-xs font-medium text-red-700">
+                                      no bookings
+                                    </Badge>
                                   )}
-                                  {s.bookings === 0 && <Badge variant="danger">🚫 No bookings</Badge>}
                                 </div>
                               </div>
                             </div>
                           </TableCell>
-                          <TableCell className="text-muted-foreground">{s.provider}</TableCell>
-                          <TableCell>{s.category}</TableCell>
-                          <TableCell>
+                          <TableCell className="py-3 align-middle text-muted-foreground">{s.provider}</TableCell>
+                          <TableCell className="py-3 align-middle">{s.category}</TableCell>
+                          <TableCell className="py-3 align-middle text-right">
                             {formatMoney(s.price)}{' '}
                             <span className="text-xs text-muted-foreground">
                               / {s.pricingType}
                             </span>
                           </TableCell>
-                          <TableCell>{s.bookings}</TableCell>
-                          <TableCell>
+                          <TableCell className="py-3 align-middle text-center">{s.bookings}</TableCell>
+                          <TableCell className="py-3 align-middle text-center">
                             {s.rating === 0 ? (
-                              <Badge variant="secondary">—</Badge>
+                              <Badge className="rounded-full border border-zinc-200 bg-zinc-100 px-2.5 py-0.5 text-xs font-medium text-zinc-700">—</Badge>
                             ) : (
-                              <Badge variant={ratingVariant(s.rating)}>{s.rating.toFixed(1)}</Badge>
+                              <Badge
+                                variant={ratingVariant(s.rating)}
+                                className="rounded-full px-2.5 py-0.5 text-xs"
+                              >
+                                {s.rating.toFixed(1)}
+                              </Badge>
                             )}
                           </TableCell>
-                          <TableCell>{s.country}</TableCell>
-                          <TableCell>
-                            <StatusBadge status={s.status} />
+                          <TableCell className="py-3 align-middle text-center">{s.country}</TableCell>
+                          <TableCell className="py-3 align-middle">
+                            <div className="flex items-center gap-2">
+                              <StatusBadge status={s.status} />
+                            </div>
                           </TableCell>
-                          <TableCell className="text-muted-foreground">{s.createdAt}</TableCell>
-                          <TableCell className="text-right">
-                            <div className="flex justify-end gap-2">
+                          <TableCell className="py-3 align-middle text-muted-foreground">{s.createdAt}</TableCell>
+                          <TableCell className="py-3 align-middle text-right">
+                            <div className="flex items-center justify-end gap-2">
                               <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
                                 <Button
                                   variant="outline"
                                   size="icon"
+                                  className="h-8 w-8 rounded-lg"
                                   onClick={() => setSelected(s)}
                                   aria-label="View"
                                 >
@@ -549,24 +574,21 @@ export default function ServicesPage() {
                                 </Button>
                               </motion.div>
                               <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-                                {s.status === 'active' ? (
-                                  <Button size="sm" variant="outline" onClick={() => toggleActive(s.id)}>
-                                    Disable
-                                  </Button>
-                                ) : (
-                                  <Button
-                                    size="sm"
-                                    className="bg-emerald-600 text-white hover:bg-emerald-600/90"
-                                    onClick={() => toggleActive(s.id)}
-                                  >
-                                    Enable
-                                  </Button>
-                                )}
+                                <Button
+                                  variant="outline"
+                                  size="icon"
+                                  className="h-8 w-8 rounded-lg"
+                                  onClick={() => toggleActive(s.id)}
+                                  aria-label={s.status === 'active' ? 'Disable' : 'Enable'}
+                                >
+                                  <Power className="h-4 w-4" />
+                                </Button>
                               </motion.div>
                               <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
                                 <Button
                                   variant="outline"
                                   size="icon"
+                                  className="h-8 w-8 rounded-lg"
                                   onClick={() => setConfirmDeleteId(s.id)}
                                   aria-label="Delete"
                                 >
@@ -580,14 +602,17 @@ export default function ServicesPage() {
                     )}
                   </TableBody>
                 </Table>
+                </div>
 
                 <div className="mt-4 flex items-center justify-between">
                   <div className="text-sm text-muted-foreground">
                     Page {page} of {totalPages}
                   </div>
-                  <div className="flex flex-wrap items-center gap-2">
+                  <div className="ml-auto flex flex-wrap items-center gap-2">
                     <Button
                       variant="outline"
+                      size="sm"
+                      className="h-9 px-3"
                       disabled={page <= 1}
                       onClick={() => setPage((p) => Math.max(1, p - 1))}
                     >
@@ -606,6 +631,8 @@ export default function ServicesPage() {
                     ))}
                     <Button
                       variant="outline"
+                      size="sm"
+                      className="h-9 px-3"
                       disabled={page >= totalPages}
                       onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                     >

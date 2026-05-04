@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { motion } from 'framer-motion'
-import { Eye, ShieldAlert } from 'lucide-react'
+import { AlertTriangle, ChevronDown, Eye, ShieldAlert } from 'lucide-react'
 
 import { PageShell } from '@/components/PageShell'
 import { Badge } from '@/components/ui/badge'
@@ -24,6 +24,12 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 
 type PayoutStatus = 'pending' | 'approved' | 'flagged' | 'hold'
 
@@ -105,10 +111,16 @@ function formatMoney(value: number) {
 }
 
 function StatusBadge({ status }: { status: PayoutStatus }) {
-  if (status === 'approved') return <Badge variant="success">approved</Badge>
-  if (status === 'flagged') return <Badge variant="danger">flagged</Badge>
-  if (status === 'hold') return <Badge variant="warning">hold</Badge>
-  return <Badge variant="warning">pending</Badge>
+  if (status === 'approved') {
+    return <Badge className="rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-0.5 text-xs font-medium text-emerald-700">approved</Badge>
+  }
+  if (status === 'flagged') {
+    return <Badge className="rounded-full border border-red-200 bg-red-50 px-2.5 py-0.5 text-xs font-medium text-red-700">flagged</Badge>
+  }
+  if (status === 'hold') {
+    return <Badge className="rounded-full border border-amber-200 bg-amber-50 px-2.5 py-0.5 text-xs font-medium text-amber-700">hold</Badge>
+  }
+  return <Badge className="rounded-full border border-amber-200 bg-amber-50 px-2.5 py-0.5 text-xs font-medium text-amber-700">pending</Badge>
 }
 
 const MotionTableRow = motion(TableRow)
@@ -250,8 +262,8 @@ export default function PayoutsPage() {
           ))}
         </div>
 
-        <div className="grid grid-cols-1 gap-4 xl:grid-cols-3">
-          <Card className="xl:col-span-2">
+        <div className="grid grid-cols-1 gap-4 xl:grid-cols-10">
+          <Card className="xl:col-span-7">
             <CardHeader className="flex-row items-center justify-between">
               <CardTitle>Payout approvals</CardTitle>
               <div className="text-sm text-muted-foreground">{filtered.length} results</div>
@@ -323,17 +335,18 @@ export default function PayoutsPage() {
                 </TabsList>
 
                 <TabsContent value={tab} className="mt-3">
-                  <Table>
+                  <div className="w-full overflow-x-auto">
+                  <Table className="w-full">
                     <TableHeader>
                       <TableRow>
-                        <TableHead>Payout ID</TableHead>
-                        <TableHead>Vendor</TableHead>
-                        <TableHead>Amount</TableHead>
-                        <TableHead>Orders</TableHead>
-                        <TableHead>Method</TableHead>
-                        <TableHead>Request Date</TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead className="text-right">Actions</TableHead>
+                        <TableHead className="w-[120px] py-3 text-xs font-medium uppercase tracking-wide text-[#895129b3]">Payout ID</TableHead>
+                        <TableHead className="min-w-[210px] py-3 text-xs font-medium uppercase tracking-wide text-[#895129b3]">Vendor</TableHead>
+                        <TableHead className="w-[120px] py-3 text-right text-xs font-medium uppercase tracking-wide text-[#895129b3]">Amount</TableHead>
+                        <TableHead className="w-[90px] py-3 text-center text-xs font-medium uppercase tracking-wide text-[#895129b3]">Orders</TableHead>
+                        <TableHead className="w-[100px] py-3 text-xs font-medium uppercase tracking-wide text-[#895129b3]">Method</TableHead>
+                        <TableHead className="w-[130px] py-3 text-xs font-medium uppercase tracking-wide text-[#895129b3]">Request Date</TableHead>
+                        <TableHead className="w-[100px] py-3 text-xs font-medium uppercase tracking-wide text-[#895129b3]">Status</TableHead>
+                        <TableHead className="w-[140px] py-3 pr-6 text-right text-xs font-medium uppercase tracking-wide text-[#895129b3]">Actions</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -350,24 +363,27 @@ export default function PayoutsPage() {
                             whileHover={{ scale: 1.01 }}
                             transition={{ duration: 0.12 }}
                           >
-                            <TableCell className="font-medium">{p.id}</TableCell>
-                            <TableCell>
-                              <div className="flex items-center gap-2">
-                                <div className="font-medium">{p.vendor}</div>
-                                {(p.refundRatio >= 0.25 || p.suspiciousVendor) && (
-                                  <Badge variant="danger">🚫 Suspicious vendor</Badge>
-                                )}
-                                {p.refundRatio >= 0.2 && (
-                                  <Badge variant="warning">⚠ High refund rate</Badge>
-                                )}
+                            <TableCell className="align-middle py-3 font-medium">{p.id}</TableCell>
+                            <TableCell className="min-w-[180px] align-middle py-3">
+                              <div className="space-y-1">
+                                <div className="flex items-center gap-1.5">
+                                  <span className="whitespace-nowrap font-medium leading-none">{p.vendor}</span>
+                                  {(p.refundRatio >= 0.2 || p.suspiciousVendor) && (
+                                    <AlertTriangle
+                                      className="h-3.5 w-3.5 text-amber-500"
+                                      title={p.suspiciousVendor ? 'Suspicious activity' : 'High refund rate'}
+                                      aria-label={p.suspiciousVendor ? 'Suspicious activity' : 'High refund rate'}
+                                    />
+                                  )}
+                                </div>
+                                <div className="text-xs text-muted-foreground">{p.vendorCountry}</div>
                               </div>
-                              <div className="text-xs text-muted-foreground">{p.vendorCountry}</div>
                             </TableCell>
-                            <TableCell>{formatMoney(p.amount)}</TableCell>
-                            <TableCell>{p.orders}</TableCell>
-                            <TableCell className="text-muted-foreground">{p.method}</TableCell>
-                            <TableCell className="text-muted-foreground">{p.requestDate}</TableCell>
-                            <TableCell>
+                            <TableCell className="align-middle py-3 text-right">{formatMoney(p.amount)}</TableCell>
+                            <TableCell className="align-middle py-3 text-center">{p.orders}</TableCell>
+                            <TableCell className="align-middle py-3 text-muted-foreground">{p.method}</TableCell>
+                            <TableCell className="align-middle py-3 text-muted-foreground">{p.requestDate}</TableCell>
+                            <TableCell className="align-middle py-3">
                               <motion.div
                                 key={`${p.id}-${p.status}`}
                                 initial={{ opacity: 0.6, scale: 0.98 }}
@@ -378,59 +394,39 @@ export default function PayoutsPage() {
                                 <StatusBadge status={p.status} />
                               </motion.div>
                             </TableCell>
-                            <TableCell className="text-right">
-                              <div className="flex justify-end gap-2">
-                                {p.status === 'pending' || p.status === 'hold' ? (
-                                  <>
-                                    <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-                                      <Button
-                                        size="sm"
-                                        className="bg-emerald-600 text-white hover:bg-emerald-600/90"
-                                        onClick={() => setPayoutStatus(p.id, 'approved')}
-                                      >
-                                        Approve
-                                      </Button>
-                                    </motion.div>
-                                    <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-                                      <Button
-                                        size="sm"
-                                        className="bg-amber-500 text-white hover:bg-amber-500/90"
-                                        onClick={() => setPayoutStatus(p.id, 'hold')}
-                                      >
-                                        Hold
-                                      </Button>
-                                    </motion.div>
-                                    <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-                                      <Button
-                                        size="sm"
-                                        variant="destructive"
-                                        onClick={() => setPayoutStatus(p.id, 'flagged')}
-                                      >
-                                        Flag
-                                      </Button>
-                                    </motion.div>
-                                  </>
-                                ) : (
-                                  <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+                            <TableCell className="w-[140px] align-middle py-3 pr-6 text-right">
+                              <div className="flex items-center justify-end">
+                                <DropdownMenu>
+                                  <DropdownMenuTrigger asChild>
                                     <Button
                                       variant="outline"
                                       size="sm"
-                                      onClick={() => setSelected(p)}
+                                      className="h-9 w-[120px] justify-between rounded-lg border border-[#89512920] bg-white px-3 text-xs text-[#895129] hover:bg-[#faf7f3]"
                                     >
-                                      {p.status === 'flagged' ? 'Review' : 'View'}
+                                      Actions
+                                      <ChevronDown className="h-3.5 w-3.5" />
                                     </Button>
-                                  </motion.div>
-                                )}
-                                <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-                                  <Button
-                                    variant="outline"
-                                    size="icon"
-                                    onClick={() => setSelected(p)}
-                                    aria-label="Open payout details"
-                                  >
-                                    <Eye className="h-4 w-4" />
-                                  </Button>
-                                </motion.div>
+                                  </DropdownMenuTrigger>
+                                  <DropdownMenuContent align="end" className="min-w-[10rem]">
+                                    {(p.status === 'pending' || p.status === 'hold') && (
+                                      <>
+                                        <DropdownMenuItem onClick={() => setPayoutStatus(p.id, 'approved')}>
+                                          Approve
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem onClick={() => setPayoutStatus(p.id, 'hold')}>
+                                          Hold
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem onClick={() => setPayoutStatus(p.id, 'flagged')}>
+                                          Flag
+                                        </DropdownMenuItem>
+                                      </>
+                                    )}
+                                    <DropdownMenuItem onClick={() => setSelected(p)}>
+                                      <Eye className="mr-2 h-4 w-4" />
+                                      View details
+                                    </DropdownMenuItem>
+                                  </DropdownMenuContent>
+                                </DropdownMenu>
                               </div>
                             </TableCell>
                           </MotionTableRow>
@@ -438,6 +434,7 @@ export default function PayoutsPage() {
                       )}
                     </TableBody>
                   </Table>
+                  </div>
 
                   <div className="mt-4 flex items-center justify-between">
                     <div className="text-sm text-muted-foreground">
@@ -446,6 +443,8 @@ export default function PayoutsPage() {
                     <div className="flex flex-wrap items-center gap-2">
                       <Button
                         variant="outline"
+                        size="sm"
+                        className="h-9 px-3"
                         disabled={page <= 1}
                         onClick={() => setPage((p) => Math.max(1, p - 1))}
                       >
@@ -464,6 +463,8 @@ export default function PayoutsPage() {
                       ))}
                       <Button
                         variant="outline"
+                        size="sm"
+                        className="h-9 px-3"
                         disabled={page >= totalPages}
                         onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                       >
@@ -476,12 +477,12 @@ export default function PayoutsPage() {
             </CardContent>
           </Card>
 
-          <Card className="xl:col-span-1">
+          <Card className="xl:col-span-3">
             <CardHeader>
               <CardTitle>Quick insights</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="rounded-lg border border-[#EEE7DF] p-3">
+              <div className="rounded-2xl border border-[#EEE7DF] p-4">
                 <div className="text-sm font-medium">Top earning vendors</div>
                 <div className="mt-3 space-y-2">
                   {insights.topVendors.map((v) => (
@@ -493,7 +494,7 @@ export default function PayoutsPage() {
                 </div>
               </div>
 
-              <div className="rounded-lg border border-[#EEE7DF] p-3">
+              <div className="rounded-2xl border border-[#EEE7DF] p-4">
                 <div className="text-sm font-medium">Highest payouts</div>
                 <div className="mt-3 space-y-2">
                   {insights.highestPayouts.map((p) => (
@@ -505,7 +506,7 @@ export default function PayoutsPage() {
                 </div>
               </div>
 
-              <div className="rounded-lg border border-[#EEE7DF] p-3">
+              <div className="rounded-2xl border border-[#EEE7DF] p-4">
                 <div className="text-sm font-medium">Recent transactions</div>
                 <div className="mt-3 space-y-2">
                   {insights.recent.map((p) => (

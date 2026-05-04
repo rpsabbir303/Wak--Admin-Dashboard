@@ -1,12 +1,12 @@
 @import 'tailwindcss';
 
 :root {
-  --background: #f8f9fb;
+  --background: #f8f6f3;
   --card: #ffffff;
   --primary: #895129;
   --foreground: #111827;
-  --muted-foreground: #6b7280;
-  --border: rgba(17, 24, 39, 0.08);
+  --muted-foreground: #7c6a58;
+  --border: rgba(137, 81, 41, 0.12);
   --radius: 10px;
 }
 

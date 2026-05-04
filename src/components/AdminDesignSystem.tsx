@@ -10,7 +10,7 @@ export function AdminCard({ className, ...props }: ComponentProps<typeof Card>) 
   return (
     <Card
       className={cn(
-        'rounded-2xl border border-[#EEE7DF] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.03)]',
+        'rounded-2xl border border-[rgba(137,81,41,0.12)] bg-white shadow-[0_2px_10px_rgba(137,81,41,0.06)]',
         className,
       )}
       {...props}
@@ -39,7 +39,7 @@ export function AdminActionButton({
 export function AdminTableRow({ className, ...props }: ComponentProps<typeof TableRow>) {
   return (
     <TableRow
-      className={cn('border-b border-[#F3ECE5] hover:bg-[rgba(137,81,41,0.035)]', className)}
+      className={cn('border-b border-[#F3ECE5] hover:border-primary/20 hover:bg-[#faf7f3]', className)}
       {...props}
     />
   )

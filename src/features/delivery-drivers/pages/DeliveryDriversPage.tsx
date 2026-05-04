@@ -329,7 +329,7 @@ export default function DeliveryDriversPage() {
                     <TableHead>Earnings</TableHead>
                     <TableHead>Live</TableHead>
                     <TableHead>Joined</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
+                    <TableHead className="min-w-[160px] pr-6 text-right">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -377,10 +377,14 @@ export default function DeliveryDriversPage() {
                           <LiveStatusBadge status={d.liveStatus} />
                         </TableCell>
                         <TableCell className="text-xs text-muted-foreground whitespace-nowrap">{d.joinDate}</TableCell>
-                        <TableCell className="text-right" onClick={(e) => e.stopPropagation()}>
+                        <TableCell className="min-w-[160px] pr-6 text-right" onClick={(e) => e.stopPropagation()}>
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                              <Button variant="outline" size="icon" className="h-9 w-9 rounded-xl border-[#DCCBBC]/70">
+                              <Button
+                                variant="outline"
+                                size="icon"
+                                className="h-10 w-10 rounded-xl border border-[#89512925] bg-white hover:border-[#89512940] hover:bg-[#faf7f3]"
+                              >
                                 <MoreHorizontal className="h-4 w-4" />
                               </Button>
                             </DropdownMenuTrigger>

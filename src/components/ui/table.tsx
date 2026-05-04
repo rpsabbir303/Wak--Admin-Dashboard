@@ -4,10 +4,10 @@ import { cn } from '@/lib/utils'
 
 const Table = React.forwardRef<HTMLTableElement, React.HTMLAttributes<HTMLTableElement>>(
   ({ className, ...props }, ref) => (
-    <div className="admin-table-scroll w-full overflow-x-auto rounded-2xl border border-[#EEE7DF] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
+    <div className="admin-table-scroll w-full overflow-x-auto rounded-2xl border border-[#8951291f] bg-white shadow-[0_2px_10px_rgba(137,81,41,0.06)] transition-all duration-200 ease-out">
       <table
         ref={ref}
-        className={cn('w-full caption-bottom text-sm', className)}
+        className={cn('w-full table-fixed caption-bottom text-sm', className)}
         {...props}
       />
     </div>
@@ -22,9 +22,8 @@ const TableHeader = React.forwardRef<
   <thead
     ref={ref}
     className={cn(
-      '[&_tr]:border-b [&_tr]:border-[#F3ECE5]',
-      '[&_tr]:bg-muted/[0.14] [&_tr]:odd:bg-muted/[0.14] [&_tr]:even:bg-muted/[0.14]',
-      '[&_tr:hover]:bg-muted/[0.18]',
+      '[&_tr]:border-b [&_tr]:border-[#8951291f]',
+      '[&_tr]:bg-[#faf7f3] [&_tr]:odd:bg-[#faf7f3] [&_tr]:even:bg-[#faf7f3]',
       className,
     )}
     {...props}
@@ -55,7 +54,7 @@ const TableFooter = React.forwardRef<
   <tfoot
     ref={ref}
     className={cn(
-      'border-t border-[#F3ECE5] bg-muted/[0.08] font-medium [&>tr]:last:border-b-0',
+      'border-t border-[#8951291f] bg-[#faf7f3] font-medium [&>tr]:last:border-b-0',
       className,
     )}
     {...props}
@@ -68,8 +67,8 @@ const TableRow = React.forwardRef<HTMLTableRowElement, React.HTMLAttributes<HTML
     <tr
       ref={ref}
       className={cn(
-        'cursor-default border-b border-[#F3ECE5] transition-all duration-200',
-        'hover:bg-[rgba(137,81,41,0.035)] data-[state=selected]:bg-primary/[0.06]',
+        'cursor-default border-b border-[#F3ECE5] transition-all duration-200 ease-out',
+        'hover:border-primary/20 hover:bg-[#faf7f3] data-[state=selected]:bg-primary/[0.06]',
         className,
       )}
       {...props}
@@ -85,7 +84,7 @@ const TableHead = React.forwardRef<
   <th
     ref={ref}
     className={cn(
-      'h-12 px-4 py-3.5 text-left align-middle text-xs font-semibold uppercase tracking-wide text-muted-foreground [&:has([role=checkbox])]:pr-0',
+      'h-12 px-6 py-4 text-left align-middle text-xs font-medium uppercase tracking-wide text-[#7c6a58] [&:has([role=checkbox])]:pr-0',
       className,
     )}
     {...props}
@@ -99,7 +98,7 @@ const TableCell = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <td
     ref={ref}
-    className={cn('px-4 py-3.5 align-middle text-sm [&:has([role=checkbox])]:pr-0', className)}
+    className={cn('px-6 py-5 align-middle text-sm [&:has([role=checkbox])]:pr-0', className)}
     {...props}
   />
 ))

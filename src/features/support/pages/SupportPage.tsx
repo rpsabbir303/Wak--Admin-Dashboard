@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { EllipsisVertical, Paperclip, Phone, Search, Send, Smile, UserRound } from 'lucide-react'
+import { EllipsisVertical, Paperclip, Search, Send, Smile, UserRound } from 'lucide-react'
 
 import { PageShell } from '@/components/PageShell'
 import { Badge } from '@/components/ui/badge'
@@ -58,7 +58,6 @@ type ChatMessage = {
   createdAt: string
   readState?: ReadState
   attachments?: Attachment[]
-  emojiReaction?: string
 }
 
 function formatMoney(value: number) {
@@ -159,7 +158,6 @@ const demoMessages: ChatMessage[] = [
     text: 'Looks like the driver is en route. ETA ~25 minutes. I’ll keep you posted.',
     createdAt: '2:16 PM',
     readState: 'delivered',
-    emojiReaction: '✅',
   },
   {
     id: 'm_4',
@@ -208,12 +206,6 @@ function PresenceDot({ presence }: { presence: Presence }) {
       title={presence === 'online' ? 'Online' : 'Offline'}
     />
   )
-}
-
-function ReadStateLabel({ state }: { state: ReadState | undefined }) {
-  if (!state) return null
-  const label = state === 'sent' ? 'Sent' : state === 'delivered' ? 'Delivered' : 'Read'
-  return <span className="text-[11px] text-white/70">{label}</span>
 }
 
 function MessageAttachment({ a }: { a: Attachment }) {
@@ -373,12 +365,13 @@ export default function SupportPage() {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.28 }}
+        className="h-[calc(100vh-120px)] overflow-hidden"
       >
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-[380px_minmax(0,1fr)]">
+        <div className="grid h-full grid-cols-1 gap-6 lg:grid-cols-[420px_minmax(0,1fr)]">
           {/* LEFT: Conversation list */}
-          <Card className="overflow-hidden">
-            <CardContent className="p-0">
-              <div className="border-b border-[#EEE7DF] bg-white p-4">
+          <Card className="h-full overflow-hidden">
+            <CardContent className="h-full p-0">
+              <div className="h-full border-b border-[#EEE7DF] bg-white p-4">
                 <div className="flex items-center justify-between gap-3">
                   <div>
                     <div className="text-sm font-semibold text-foreground">Inbox</div>
@@ -401,8 +394,8 @@ export default function SupportPage() {
                   </div>
                 </div>
 
-                <div className="mt-3">
-                  <Tabs value={tab} onValueChange={(v) => setTab(v as typeof tab)}>
+                <div className="mt-3 min-h-0 flex-1">
+                  <Tabs value={tab} onValueChange={(v) => setTab(v as typeof tab)} className="flex h-full min-h-0 flex-col">
                     <TabsList className="w-full justify-start">
                       <TabsTrigger value="all">All</TabsTrigger>
                       <TabsTrigger value="unread">Unread</TabsTrigger>
@@ -410,12 +403,12 @@ export default function SupportPage() {
                       <TabsTrigger value="customers">Customers</TabsTrigger>
                       <TabsTrigger value="drivers">Drivers</TabsTrigger>
                     </TabsList>
-                    <TabsContent value={tab} className="mt-3">
+                    <TabsContent value={tab} className="mt-3 min-h-0 flex-1">
                       <motion.div
                         initial="hidden"
                         animate="show"
                         variants={{ hidden: {}, show: { transition: { staggerChildren: 0.06 } } }}
-                        className="max-h-[68vh] space-y-2 overflow-auto px-1 pb-3"
+                        className="h-full space-y-2 overflow-auto px-1 pb-3"
                       >
                         {filteredConversations.length === 0 ? (
                           <div className="py-10 text-center text-sm text-muted-foreground">
@@ -434,9 +427,9 @@ export default function SupportPage() {
                                 whileHover={{ scale: 1.01, y: -2 }}
                                 onClick={() => setActiveConversation(c.id)}
                                 className={cn(
-                                  'cursor-pointer rounded-xl border border-[#EEE7DF] bg-white p-3 shadow-sm transition-colors',
-                                  'hover:bg-primary/5',
-                                  activeItem && 'border-primary/20 bg-primary/10',
+                                  'cursor-pointer rounded-2xl border border-[#8951291f] bg-white p-3 shadow-[0_2px_10px_rgba(137,81,41,0.06)] transition-all duration-200 ease-out',
+                                  'hover:bg-[#faf7f3] hover:shadow-[0_6px_18px_rgba(137,81,41,0.12)]',
+                                  activeItem && 'border-[#89512930] bg-[#faf7f3]',
                                 )}
                               >
                                 <div className="flex items-start gap-3">
@@ -503,17 +496,17 @@ export default function SupportPage() {
           </Card>
 
           {/* RIGHT: Chat area */}
-          <Card className="overflow-hidden">
-            <CardContent className="p-0">
+          <Card className="h-full overflow-hidden">
+            <CardContent className="h-full p-0">
               {!active ? (
-                <div className="flex h-[72vh] items-center justify-center text-sm text-muted-foreground">
+                <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
                   Select a conversation to start.
                 </div>
               ) : (
-                <div className="grid h-[72vh] grid-cols-1 lg:grid-cols-[minmax(0,1fr)_auto]">
-                  <div className="flex min-w-0 flex-col">
+                <div className="grid h-full grid-cols-1 lg:grid-cols-[minmax(0,1fr)_340px]">
+                  <div className="flex h-full min-w-0 flex-1 flex-col">
                     {/* Header */}
-                    <div className="flex items-center justify-between gap-3 border-b border-[#EEE7DF] bg-white px-4 py-3">
+                    <div className="flex items-center justify-between gap-3 border-b border-[#8951291f] bg-white px-6 py-4">
                       <div className="flex min-w-0 items-center gap-3">
                         <Avatar className="h-10 w-10">
                           <AvatarFallback>{getInitials(active.name)}</AvatarFallback>
@@ -535,11 +528,6 @@ export default function SupportPage() {
                           <Button variant="outline" size="sm" className="h-9 gap-2">
                             <UserRound className="h-4 w-4" />
                             View profile
-                          </Button>
-                        </motion.div>
-                        <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-                          <Button variant="outline" size="sm" className="h-9 w-9 p-0" aria-label="Call">
-                            <Phone className="h-4 w-4" />
                           </Button>
                         </motion.div>
 
@@ -565,12 +553,12 @@ export default function SupportPage() {
                     </div>
 
                     {/* Messages */}
-                    <div className="min-h-0 flex-1 overflow-auto bg-[#fbfbfb] px-4 py-4">
+                    <div className="min-h-0 flex-1 overflow-y-auto bg-[#f8f6f3] px-6 py-3">
                       <motion.div
                         initial="hidden"
                         animate="show"
                         variants={{ hidden: {}, show: { transition: { staggerChildren: 0.03 } } }}
-                        className="mx-auto flex max-w-3xl flex-col gap-2"
+                        className="mx-auto flex min-h-full max-w-3xl flex-col justify-end gap-1.5"
                       >
                         {activeMessages.map((m, idx) => {
                           const isAdmin = m.sender === 'admin'
@@ -585,10 +573,10 @@ export default function SupportPage() {
                             >
                               <div
                                 className={cn(
-                                  'max-w-[88%] rounded-2xl border px-3 py-2 shadow-sm',
+                                  'max-w-[88%] rounded-2xl border px-4 py-2.5 shadow-[0_2px_10px_rgba(137,81,41,0.06)] transition-all duration-200 ease-out',
                                   isAdmin
-                                    ? 'border-primary/20 bg-primary text-white shadow-[0_10px_30px_rgba(137,81,41,0.15)]'
-                                    : 'border-[#EEE7DF] bg-white',
+                                    ? 'border-[#89512930] bg-[#89512914] text-foreground'
+                                    : 'border-[#8951291f] bg-white',
                                 )}
                               >
                                 {m.text && <div className="text-sm leading-relaxed">{m.text}</div>}
@@ -596,14 +584,9 @@ export default function SupportPage() {
                                   <MessageAttachment key={`${m.id}_a_${i}`} a={a} />
                                 ))}
 
-                                <div className={cn('mt-1 flex items-center justify-between gap-3 text-[11px]', isAdmin ? 'text-white/70' : 'text-muted-foreground')}>
+                                <div className={cn('mt-2 flex items-center gap-3 text-[11px]', 'text-[#7c6a58]')}>
                                   <span>{m.createdAt}</span>
-                                  {isAdmin ? <ReadStateLabel state={m.readState} /> : <span />}
                                 </div>
-
-                                {m.emojiReaction && (
-                                  <div className={cn('mt-1 text-xs', isAdmin ? 'text-white' : 'text-foreground')}>{m.emojiReaction}</div>
-                                )}
                               </div>
                             </MotionBubble>
                           )
@@ -629,15 +612,25 @@ export default function SupportPage() {
                     </div>
 
                     {/* Composer */}
-                    <div className="border-t border-[#EEE7DF] bg-white px-4 py-3">
-                      <div className="mx-auto flex max-w-3xl items-end gap-2">
+                    <div className="border-t border-[#8951291f] bg-white px-6 py-4">
+                      <div className="mx-auto flex max-w-3xl items-center gap-3">
                         <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-                          <Button variant="outline" size="sm" className="h-10 w-10 p-0" aria-label="Attachment">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-11 w-11 rounded-full border-[#89512924] bg-white p-0 text-[#895129] hover:bg-[#faf7f3]"
+                            aria-label="Attachment"
+                          >
                             <Paperclip className="h-4 w-4" />
                           </Button>
                         </motion.div>
                         <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-                          <Button variant="outline" size="sm" className="h-10 w-10 p-0" aria-label="Emoji">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-11 w-11 rounded-full border-[#89512924] bg-white p-0 text-[#895129] hover:bg-[#faf7f3]"
+                            aria-label="Emoji"
+                          >
                             <Smile className="h-4 w-4" />
                           </Button>
                         </motion.div>
@@ -652,15 +645,14 @@ export default function SupportPage() {
                                 sendMessage()
                               }
                             }}
-                            placeholder="Write a message…"
+                            placeholder="Write a message..."
                             rows={1}
-                            className="min-h-10 w-full resize-none rounded-xl border border-[#EEE7DF] bg-white px-3 py-2 text-sm leading-relaxed focus-visible:outline-none focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/20"
+                            className="h-11 min-h-11 w-full resize-none rounded-full border border-[#89512924] bg-white px-4 py-2.5 text-sm leading-5 focus-visible:outline-none focus-visible:border-[#895129] focus-visible:ring-2 focus-visible:ring-[#89512920]"
                           />
-                          <div className="mt-1 text-[11px] text-muted-foreground">Enter to send • Shift+Enter for new line</div>
                         </div>
 
-                        <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}>
-                          <Button onClick={sendMessage} className="h-10 gap-2">
+                        <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }} className="self-center">
+                          <Button onClick={sendMessage} className="flex h-11 items-center justify-center self-center rounded-full bg-[#895129] px-5 text-white hover:bg-[#77411f]">
                             <Send className="h-4 w-4" />
                             Send
                           </Button>
@@ -674,12 +666,12 @@ export default function SupportPage() {
                     {showInfo && (
                       <motion.aside
                         initial={{ width: 0, opacity: 0 }}
-                        animate={{ width: 320, opacity: 1 }}
+                        animate={{ width: 340, opacity: 1 }}
                         exit={{ width: 0, opacity: 0 }}
                         transition={{ duration: 0.24, ease: 'easeOut' }}
-                        className="hidden border-l border-[#EEE7DF] bg-white lg:block"
+                        className="hidden h-full overflow-y-auto border-l border-[#EEE7DF] bg-white lg:block"
                       >
-                        <div className="h-full overflow-auto p-4">
+                        <div className="h-full p-4">
                           <div className="flex items-start justify-between gap-3">
                             <div>
                               <div className="text-sm font-semibold text-foreground">User details</div>

@@ -273,7 +273,7 @@ export default function UsersPage() {
                   <TableHead>Status</TableHead>
                   <TableHead>Orders</TableHead>
                   <TableHead>Total Spend</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
+                  <TableHead className="min-w-[160px] pr-6 text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -310,7 +310,7 @@ export default function UsersPage() {
                       onClick={() => setClickedId(u.id)}
                       className={clickedId === u.id ? 'bg-primary/5' : undefined}
                     >
-                      <TableCell>
+                      <TableCell className="align-middle py-4">
                         <div className="flex items-center gap-3">
                           <Avatar className="h-9 w-9">
                             <AvatarFallback>{getInitials(u.name)}</AvatarFallback>
@@ -321,22 +321,23 @@ export default function UsersPage() {
                           </div>
                         </div>
                       </TableCell>
-                      <TableCell className="text-muted-foreground">{u.email}</TableCell>
-                      <TableCell>
+                      <TableCell className="align-middle py-4 text-muted-foreground">{u.email}</TableCell>
+                      <TableCell className="align-middle py-4">
                         <RoleBadge role={u.role} />
                       </TableCell>
-                      <TableCell>{u.country}</TableCell>
-                      <TableCell>
+                      <TableCell className="align-middle py-4">{u.country}</TableCell>
+                      <TableCell className="align-middle py-4">
                         <StatusBadge status={u.status} />
                       </TableCell>
-                      <TableCell>{u.totalOrders}</TableCell>
-                      <TableCell>{formatMoney(u.totalSpent)}</TableCell>
-                      <TableCell className="text-right">
-                        <div className="flex justify-end gap-2">
+                      <TableCell className="align-middle py-4">{u.totalOrders}</TableCell>
+                      <TableCell className="align-middle py-4">{formatMoney(u.totalSpent)}</TableCell>
+                      <TableCell className="min-w-[160px] align-middle py-4 pr-6 text-right">
+                        <div className="flex items-center justify-end gap-2">
                           <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
                             <Button
                               variant="outline"
                               size="icon"
+                              className="h-9 w-9 rounded-lg border border-[#89512920] bg-white text-[#895129] hover:bg-[#faf7f3]"
                               onClick={(e) => {
                                 e.stopPropagation()
                                 setSelected(u)
@@ -350,9 +351,8 @@ export default function UsersPage() {
                           <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
                             {u.status === 'active' ? (
                               <Button
-                                variant="destructive"
                                 size="sm"
-                                className="h-9"
+                                className="h-9 rounded-lg border border-red-200 bg-[#fff1f1] px-3 text-sm font-medium text-red-600 hover:bg-[#ffe6e6]"
                                 onClick={(e) => {
                                   e.stopPropagation()
                                   requestToggle(u)
@@ -363,7 +363,7 @@ export default function UsersPage() {
                             ) : (
                               <Button
                                 size="sm"
-                                className="h-9 bg-emerald-600 text-white hover:bg-emerald-600/90"
+                                className="h-9 rounded-lg border border-green-200 bg-[#eefbf3] px-3 text-sm font-medium text-green-700 hover:bg-[#e2f6ea]"
                                 onClick={(e) => {
                                   e.stopPropagation()
                                   requestToggle(u)

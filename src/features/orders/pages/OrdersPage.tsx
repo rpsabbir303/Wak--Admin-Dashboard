@@ -532,7 +532,7 @@ export default function OrdersPage() {
                       <TableHead>Payment</TableHead>
                       <TableHead>Delivery</TableHead>
                       <TableHead>Date</TableHead>
-                      <TableHead className="text-right">Actions</TableHead>
+                      <TableHead className="min-w-[160px] pr-6 text-right">Actions</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -571,9 +571,15 @@ export default function OrdersPage() {
                             <DeliveryBadge status={o.delivery.status} />
                           </TableCell>
                           <TableCell className="text-muted-foreground">{o.createdAt}</TableCell>
-                          <TableCell className="text-right">
-                            <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} className="inline-block">
-                              <Button variant="outline" size="icon" onClick={() => setSelected(o)} aria-label="View">
+                          <TableCell className="min-w-[160px] pr-6 text-right">
+                            <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} className="inline-flex items-center justify-end">
+                              <Button
+                                variant="outline"
+                                size="icon"
+                                className="h-10 w-10 rounded-xl border border-[#89512925] bg-white hover:border-[#89512940] hover:bg-[#faf7f3]"
+                                onClick={() => setSelected(o)}
+                                aria-label="View"
+                              >
                                 <Eye className="h-4 w-4" />
                               </Button>
                             </motion.div>

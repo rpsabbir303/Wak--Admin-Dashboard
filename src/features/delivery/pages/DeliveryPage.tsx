@@ -450,7 +450,7 @@ export default function DeliveryPage() {
                       <TableHead>Pickup → Drop</TableHead>
                       <TableHead>Status</TableHead>
                       <TableHead>ETA</TableHead>
-                      <TableHead className="text-right">Actions</TableHead>
+                      <TableHead className="min-w-[160px] pr-6 text-right">Actions</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -490,10 +490,16 @@ export default function DeliveryPage() {
                             </motion.div>
                           </TableCell>
                           <TableCell>{d.eta}</TableCell>
-                          <TableCell className="text-right">
-                            <div className="flex justify-end gap-2">
+                          <TableCell className="min-w-[160px] pr-6 text-right">
+                            <div className="flex flex-wrap items-center justify-end gap-3">
                               <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-                                <Button variant="outline" size="icon" onClick={() => setSelected(d)} aria-label="View details">
+                                <Button
+                                  variant="outline"
+                                  size="icon"
+                                  className="h-10 w-10 rounded-xl border border-[#89512925] bg-white hover:border-[#89512940] hover:bg-[#faf7f3]"
+                                  onClick={() => setSelected(d)}
+                                  aria-label="View details"
+                                >
                                   <Eye className="h-4 w-4" />
                                 </Button>
                               </motion.div>

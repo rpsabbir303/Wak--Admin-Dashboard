@@ -5,21 +5,21 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0',
+  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-medium transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#89512920] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0',
   {
     variants: {
       variant: {
-        default: 'bg-primary text-white hover:bg-primary/90',
-        secondary: 'bg-muted text-foreground hover:bg-muted/80',
+        default: 'bg-[#895129] text-white hover:bg-[#77411f]',
+        secondary: 'border border-[#89512930] bg-white text-foreground hover:bg-[#faf7f3]',
         outline:
-          'border border-[#DCCBBC] bg-white text-foreground shadow-none rounded-xl transition-all duration-200 hover:border-[#895129] hover:bg-[#895129] hover:text-white active:bg-[#7b4825]',
-        ghost: 'hover:bg-black/[0.04] text-foreground',
-        destructive: 'bg-red-600 text-white hover:bg-red-600/90',
+          'border border-[#DCCBBC] bg-white text-foreground shadow-none rounded-xl hover:border-[#895129] hover:bg-[#faf7f3] hover:text-foreground',
+        ghost: 'hover:bg-[#faf7f3] text-foreground',
+        destructive: 'border border-rose-200 bg-rose-50 text-rose-700 hover:bg-rose-100',
       },
       size: {
         default: 'h-10 px-4 py-2',
-        sm: 'h-9 rounded-lg px-3',
-        lg: 'h-11 rounded-lg px-6',
+        sm: 'h-10 px-3.5',
+        lg: 'h-11 px-6',
         icon: 'h-10 w-10',
       },
     },

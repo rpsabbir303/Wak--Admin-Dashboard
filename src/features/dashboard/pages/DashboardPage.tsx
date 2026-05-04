@@ -12,6 +12,7 @@ import {
   YAxis,
 } from 'recharts'
 import { Link } from 'react-router-dom'
+import { Boxes, Package, ShoppingBag, Store } from 'lucide-react'
 
 import { useGetDashboardStatsQuery } from '@/features/dashboard/dashboardApi'
 import { PageShell } from '@/components/PageShell'
@@ -94,7 +95,7 @@ type ActivityItem = {
 
 type DashboardData = {
   totals: { users: number; vendors: number; orders: number; revenue: number }
-  meta?: { activeDeliveries: number; pendingApprovals: number; supportTickets: number }
+  meta?: { activeDeliveries: number; pendingApprovals: number; supportTickets: number; weeklyGrowth?: number }
   ordersTrend: Array<{ date: string; orders: number }>
   revenueTrend: Array<{ date: string; revenue: number }>
   pendingVendors: DashboardVendor[]
@@ -147,14 +148,11 @@ const motionVariants = {
 } as const
 
 type DashboardStatItem = {
-  kind: 'stat'
   label: string
   value: number
   format: (value: number) => string
   href: string
 }
-
-type DashboardQuickActionsItem = { kind: 'quick_actions' }
 
 export default function DashboardPage() {
   const { data, isLoading } = useGetDashboardStatsQuery()
@@ -212,10 +210,20 @@ export default function DashboardPage() {
   }
 
   const totals = safe.totals
-  const meta = safe.meta ?? {
+  const rawMeta = safe.meta ?? {
     activeDeliveries: safe.activeDeliveries.length,
     pendingApprovals: safe.pendingVendors.length,
     supportTickets: 0,
+  }
+  const weeklyGrowthFromTrend = (() => {
+    const first = safe.ordersTrend[0]?.orders ?? 0
+    const last = safe.ordersTrend[safe.ordersTrend.length - 1]?.orders ?? 0
+    if (first <= 0) return 0
+    return ((last - first) / first) * 100
+  })()
+  const meta = {
+    ...rawMeta,
+    weeklyGrowth: rawMeta.weeklyGrowth ?? weeklyGrowthFromTrend,
   }
   const visiblePendingVendors = safe.pendingVendors.filter((v) => !approvedVendorIds.has(v.id))
 
@@ -223,122 +231,75 @@ export default function DashboardPage() {
     <PageShell
       title="Dashboard"
       description="Overview of platform health, approvals, orders, and delivery activity."
-      right={
-        <div className="flex items-center gap-2">
-          <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-            <Button variant="outline">Export</Button>
-          </motion.div>
-          <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-            <Button>View reports</Button>
-          </motion.div>
-        </div>
-      }
     >
       <motion.div
         initial="hidden"
         animate="show"
         variants={motionVariants.page}
-        className="space-y-4"
+        className="space-y-6"
       >
-        <motion.div variants={motionVariants.container} className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <motion.div variants={motionVariants.container} className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
           {(
             [
               {
-                kind: 'stat',
                 label: 'Total Users',
                 value: totals.users,
                 format: (v: number) => formatNumber(v),
                 href: '/users',
               },
               {
-                kind: 'stat',
                 label: 'Total Vendors',
                 value: totals.vendors,
                 format: (v: number) => formatNumber(v),
                 href: '/admin/vendors',
               },
               {
-                kind: 'stat',
                 label: 'Total Orders',
                 value: totals.orders,
                 format: (v: number) => formatNumber(v),
                 href: '/orders',
               },
-              { kind: 'quick_actions' },
               {
-                kind: 'stat',
                 label: 'Total Revenue',
                 value: totals.revenue,
                 format: (v: number) => formatMoney(v),
                 href: '/analytics',
               },
               {
-                kind: 'stat',
                 label: 'Active Deliveries',
                 value: meta.activeDeliveries,
                 format: (v: number) => formatNumber(v),
                 href: '/delivery',
               },
               {
-                kind: 'stat',
                 label: 'Pending Approvals',
                 value: meta.pendingApprovals,
                 format: (v: number) => formatNumber(v),
                 href: '/admin/vendors',
               },
               {
-                kind: 'stat',
                 label: 'Support Tickets',
                 value: meta.supportTickets,
                 format: (v: number) => formatNumber(v),
                 href: '/support',
               },
-            ] satisfies Array<DashboardStatItem | DashboardQuickActionsItem>
-          ).map((item) =>
-            item.kind === 'quick_actions' ? (
-              <motion.div
-                key="quick-actions"
-                variants={motionVariants.statsItem}
-                whileHover={{ y: -4 }}
-                transition={{ type: 'spring', stiffness: 260, damping: 22 }}
-              >
-                <Card className="transition-shadow hover:shadow-lg">
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-sm text-muted-foreground">Quick actions</CardTitle>
-                  </CardHeader>
-                  <CardContent className="grid grid-cols-2 gap-2">
-                    <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-                      <Button asChild size="sm" className="w-full">
-                        <Link to="/products">Add Product</Link>
-                      </Button>
-                    </motion.div>
-                    <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-                      <Button asChild size="sm" className="w-full">
-                        <Link to="/services">Add Service</Link>
-                      </Button>
-                    </motion.div>
-                    <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-                      <Button asChild size="sm" className="w-full">
-                        <Link to="/admin/vendors">Add Vendor</Link>
-                      </Button>
-                    </motion.div>
-                    <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-                      <Button asChild size="sm" variant="outline" className="w-full">
-                        <Link to="/orders">View Orders</Link>
-                      </Button>
-                    </motion.div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ) : (
+              {
+                label: 'Weekly Growth',
+                value: meta.weeklyGrowth,
+                format: (v: number) => `${v >= 0 ? '+' : ''}${v.toFixed(1)}%`,
+                href: '/analytics',
+              },
+            ] satisfies DashboardStatItem[]
+          ).map((item) => (
             <motion.div
               key={item.label}
               variants={motionVariants.statsItem}
               whileHover={{ y: -4 }}
               transition={{ type: 'spring', stiffness: 260, damping: 22 }}
+              className="h-full"
             >
-              <Link to={item.href} className="block">
-                <Card className="transition-shadow hover:shadow-lg">
+              <Link to={item.href} className="block h-full">
+                <Card className="group h-full">
                   <CardHeader className="pb-2">
                     <CardTitle className="text-sm text-muted-foreground">{item.label}</CardTitle>
                   </CardHeader>
@@ -354,20 +315,85 @@ export default function DashboardPage() {
                 </Card>
               </Link>
             </motion.div>
-            ),
-          )}
+          ))}
         </motion.div>
 
-        <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
+        <motion.div variants={motionVariants.sectionItem}>
+          <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#89512914] bg-[#fcfaf8] p-4">
+            <div className="flex flex-wrap items-center gap-3">
+              <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}>
+                <Button
+                  variant="secondary"
+                  className="h-10 rounded-xl border border-[#89512920] bg-white px-4 text-[#895129] hover:bg-[#f7f2ed]"
+                >
+                  Export
+                </Button>
+              </motion.div>
+              <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}>
+                <Button className="h-10 rounded-xl border border-[#89512920] bg-[#895129] px-4 text-white hover:bg-[#77411f]">
+                  View reports
+                </Button>
+              </motion.div>
+            </div>
+            <div className="flex flex-wrap items-center gap-3">
+              <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}>
+                <Button asChild className="h-10 rounded-xl border border-[#89512920] bg-[#895129] px-4 text-white hover:bg-[#77411f]">
+                  <Link to="/products" className="inline-flex items-center gap-2">
+                    <Package className="h-4 w-4 text-white/90" />
+                    Add Product
+                  </Link>
+                </Button>
+              </motion.div>
+              <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}>
+                <Button
+                  asChild
+                  variant="secondary"
+                  className="h-10 rounded-xl border border-[#89512920] bg-white px-4 text-[#895129] hover:bg-[#f7f2ed]"
+                >
+                  <Link to="/admin/vendors" className="inline-flex items-center gap-2">
+                    <Store className="h-4 w-4 text-[#895129]" />
+                    Add Vendor
+                  </Link>
+                </Button>
+              </motion.div>
+              <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}>
+                <Button
+                  asChild
+                  variant="secondary"
+                  className="h-10 rounded-xl border border-[#89512920] bg-white px-4 text-[#895129] hover:bg-[#f7f2ed]"
+                >
+                  <Link to="/services" className="inline-flex items-center gap-2">
+                    <Boxes className="h-4 w-4 text-[#895129]" />
+                    Add Service
+                  </Link>
+                </Button>
+              </motion.div>
+              <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}>
+                <Button
+                  asChild
+                  variant="secondary"
+                  className="h-10 rounded-xl border border-[#89512920] bg-white px-4 text-[#895129] hover:bg-[#f7f2ed]"
+                >
+                  <Link to="/orders" className="inline-flex items-center gap-2">
+                    <ShoppingBag className="h-4 w-4 text-[#895129]" />
+                    View Orders
+                  </Link>
+                </Button>
+              </motion.div>
+            </div>
+          </div>
+        </motion.div>
+
+        <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
           <motion.div variants={motionVariants.sectionItem}>
-            <Card className="transition-shadow hover:shadow-lg">
+            <Card className="group">
               <CardHeader>
                 <CardTitle>Orders trend</CardTitle>
               </CardHeader>
-              <CardContent className="h-[280px]">
+              <CardContent className="h-[280px] pt-1">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={safe.ordersTrend}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.06)" />
+                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(137,81,41,0.12)" />
                     <XAxis dataKey="date" tickLine={false} axisLine={false} />
                     <YAxis tickLine={false} axisLine={false} />
                     <Tooltip />
@@ -388,14 +414,14 @@ export default function DashboardPage() {
           </motion.div>
 
           <motion.div variants={motionVariants.sectionItem}>
-            <Card className="transition-shadow hover:shadow-lg">
+            <Card className="group">
               <CardHeader>
                 <CardTitle>Revenue</CardTitle>
               </CardHeader>
-              <CardContent className="h-[280px]">
+              <CardContent className="h-[280px] pt-1">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={safe.revenueTrend}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.06)" />
+                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(137,81,41,0.12)" />
                     <XAxis dataKey="date" tickLine={false} axisLine={false} />
                     <YAxis tickLine={false} axisLine={false} />
                     <Tooltip formatter={(v) => formatMoney(Number(v))} />
@@ -414,9 +440,9 @@ export default function DashboardPage() {
           </motion.div>
         </div>
 
-        <div className="grid grid-cols-1 gap-4 xl:grid-cols-3">
+        <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
           <motion.div variants={motionVariants.sectionItem} className="xl:col-span-1">
-            <Card className="transition-shadow hover:shadow-lg">
+            <Card className="group">
               <CardHeader className="flex-row items-center justify-between">
                 <CardTitle>Pending vendor approvals</CardTitle>
                 <div className="flex items-center gap-2">
@@ -432,7 +458,7 @@ export default function DashboardPage() {
                 ) : (
                   <div className="space-y-3">
                     {visiblePendingVendors.slice(0, 5).map((v) => (
-                      <div key={v.id} className="rounded-lg border border-[#EEE7DF] p-3 transition-shadow hover:shadow-sm">
+                      <div key={v.id} className="rounded-2xl border border-[#8951291f] p-3 transition-all duration-200 ease-out hover:-translate-y-[1px] hover:shadow-[0_6px_18px_rgba(137,81,41,0.12)]">
                         <div className="flex items-start justify-between gap-3">
                           <div>
                             <div className="text-sm font-medium">{v.businessName}</div>

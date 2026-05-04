@@ -456,7 +456,7 @@ export default function VendorsPage() {
                   <TableHead>Total Orders</TableHead>
                   <TableHead>Earnings</TableHead>
                   <TableHead>Joined Date</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
+                  <TableHead className="min-w-[160px] pr-6 text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -500,12 +500,13 @@ export default function VendorsPage() {
                         <Money value={v.earnings} />
                       </TableCell>
                       <TableCell className="text-muted-foreground">{v.joinedAt}</TableCell>
-                      <TableCell className="text-right">
-                        <div className="flex justify-end gap-2">
+                      <TableCell className="min-w-[160px] pr-6 text-right">
+                        <div className="flex flex-wrap items-center justify-end gap-3">
                           <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
                             <Button
                               variant="outline"
                               size="icon"
+                              className="h-10 w-10 rounded-xl border border-[#89512925] bg-white hover:border-[#89512940] hover:bg-[#faf7f3]"
                               onClick={() => setSelected(v)}
                               aria-label="View"
                             >
@@ -538,7 +539,7 @@ export default function VendorsPage() {
                             <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
                               <Button
                                 size="sm"
-                                variant="destructive"
+                                className="h-10 rounded-xl border border-red-200 bg-[#fff1f1] px-4 text-sm font-medium text-red-600 hover:bg-[#ffe6e6]"
                                 onClick={() => requestAction(v, 'block')}
                               >
                                 Block
@@ -548,7 +549,7 @@ export default function VendorsPage() {
                             <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
                               <Button
                                 size="sm"
-                                className="bg-emerald-600 text-white hover:bg-emerald-600/90"
+                                className="h-10 rounded-xl border border-green-200 bg-[#eefbf3] px-4 text-sm font-medium text-green-700 hover:bg-[#e2f6ea]"
                                 onClick={() => requestAction(v, 'unblock')}
                               >
                                 Unblock

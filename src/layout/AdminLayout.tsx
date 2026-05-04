@@ -729,7 +729,7 @@ export function AdminLayout() {
 
       <div style={{ marginLeft: isMobile ? 0 : sidebarWidth }}>
         <header className="sticky top-0 z-30 border-b border-[#EEE7DF] bg-white/80 backdrop-blur">
-          <div className="flex h-16 items-center justify-between px-4">
+          <div className="flex h-16 items-center justify-between px-3 sm:px-4 lg:px-6">
             <div className="flex items-center gap-3">
               <Button
                 variant="outline"
@@ -740,14 +740,17 @@ export function AdminLayout() {
               >
                 <PanelLeftOpen className="h-5 w-5" />
               </Button>
-              <div className="hidden md:flex items-center gap-2 rounded-lg border border-[#EEE7DF] bg-white px-3 py-2 text-sm text-muted-foreground w-[360px]">
+              <div className="hidden h-10 md:flex items-center gap-2 rounded-xl border border-[#EEE7DF] bg-white px-3 text-sm text-muted-foreground w-[360px]">
                 <Search className="h-4 w-4" />
                 <Input
                   className="h-auto border-0 p-0 shadow-none focus-visible:ring-0"
                   placeholder="Search users, orders, vendors…"
                 />
               </div>
-              <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-1 text-sm text-muted-foreground">
+              <nav
+                aria-label="Breadcrumb"
+                className="flex min-h-10 flex-wrap items-center gap-1 text-sm text-muted-foreground"
+              >
                 {breadcrumbItems.map((crumb, i) => (
                   <span key={`${crumb.label}-${i}`} className="inline-flex items-center gap-1">
                     {i > 0 && <ChevronRight className="h-3.5 w-3.5 shrink-0 text-muted-foreground/50" aria-hidden />}
@@ -775,7 +778,7 @@ export function AdminLayout() {
             <div className="flex items-center gap-2">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="icon" className="relative">
+                  <Button variant="outline" size="icon" className="relative h-10 w-10">
                     <Bell className="h-4 w-4" />
                     {unreadCount > 0 && (
                       <span className="absolute -right-1 -top-1 grid h-5 min-w-5 place-items-center rounded-full bg-primary px-1 text-[10px] font-semibold text-white">
@@ -829,7 +832,7 @@ export function AdminLayout() {
 
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className="gap-2">
+                  <Button variant="outline" className="h-10 gap-2">
                     <Avatar className="h-7 w-7">
                       <AvatarFallback>AD</AvatarFallback>
                     </Avatar>
@@ -856,7 +859,7 @@ export function AdminLayout() {
           </div>
         </header>
 
-        <main className="p-4 md:p-6">
+        <main className="px-3 pb-6 pt-6 sm:px-4 lg:px-6">
           <AnimatePresence mode="wait">
             <motion.div
               key={location.pathname}
@@ -864,6 +867,7 @@ export function AdminLayout() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -6 }}
               transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
+              className="mx-auto w-full max-w-[1440px]"
             >
               <Outlet />
             </motion.div>
