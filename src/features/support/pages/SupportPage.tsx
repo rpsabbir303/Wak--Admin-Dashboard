@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { EllipsisVertical, Paperclip, Search, Send, Smile, UserRound } from 'lucide-react'
+import { EllipsisVertical, Paperclip, Search, Send, UserRound } from 'lucide-react'
 
 import { PageShell } from '@/components/PageShell'
 import { Badge } from '@/components/ui/badge'
@@ -612,8 +612,8 @@ export default function SupportPage() {
                     </div>
 
                     {/* Composer */}
-                    <div className="border-t border-[#8951291f] bg-white px-6 py-4">
-                      <div className="mx-auto flex max-w-3xl items-center gap-3">
+                    <div className="border-t border-[#8951291f] bg-white px-6 py-3">
+                      <div className="mx-auto flex max-w-3xl items-center gap-2.5">
                         <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
                           <Button
                             variant="outline"
@@ -624,17 +624,6 @@ export default function SupportPage() {
                             <Paperclip className="h-4 w-4" />
                           </Button>
                         </motion.div>
-                        <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="h-11 w-11 rounded-full border-[#89512924] bg-white p-0 text-[#895129] hover:bg-[#faf7f3]"
-                            aria-label="Emoji"
-                          >
-                            <Smile className="h-4 w-4" />
-                          </Button>
-                        </motion.div>
-
                         <div className="flex-1">
                           <textarea
                             value={composer}
