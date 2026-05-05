@@ -30,6 +30,7 @@ import { markAllRead } from '@/app/notifications/notificationsSlice'
 const COLLAPSE_KEY = 'admin_sidebar_collapsed'
 const SETTINGS_OPEN_KEY = 'admin_sidebar_settings_open'
 const VENDORS_OPEN_KEY = 'admin_sidebar_vendors_open'
+const PRODUCTS_OPEN_KEY = 'admin_sidebar_products_open'
 
 function adminBreadcrumbItems(pathname: string): { label: string; to?: string }[] {
   if (pathname === '/') {
@@ -66,6 +67,14 @@ function adminBreadcrumbItems(pathname: string): { label: string; to?: string }[
   }
   if (pathname === spBase) {
     return [{ label: 'Dashboard', to: '/' }, { label: 'Service Providers' }]
+  }
+
+  if (pathname === '/admin/categories') {
+    return [
+      { label: 'Dashboard', to: '/' },
+      { label: 'Products', to: '/products' },
+      { label: 'Categories' },
+    ]
   }
 
   const segments = pathname.split('/').filter(Boolean)
@@ -122,6 +131,14 @@ export function AdminLayout() {
     return raw !== '0'
   })
 
+  const [productsOpen, setProductsOpen] = useState(() => {
+    const inProducts =
+      location.pathname.startsWith('/admin/categories') || location.pathname.startsWith('/products')
+    if (inProducts) return true
+    const raw = localStorage.getItem(PRODUCTS_OPEN_KEY)
+    return raw !== '0'
+  })
+
   useEffect(() => {
     const inSettings = location.pathname.startsWith('/settings')
     if (!inSettings) return
@@ -137,12 +154,23 @@ export function AdminLayout() {
   }, [location.pathname])
 
   useEffect(() => {
+    const inProducts =
+      location.pathname.startsWith('/admin/categories') || location.pathname.startsWith('/products')
+    if (!inProducts) return
+    const t = window.setTimeout(() => setProductsOpen(true), 0)
+    return () => window.clearTimeout(t)
+  }, [location.pathname])
+
+  useEffect(() => {
     // collapse settings / vendors menus by default on small screens when not on those routes
     const mql = window.matchMedia('(max-width: 767px)')
     const handle = () => {
       setIsMobile(mql.matches)
       if (!location.pathname.startsWith('/settings') && mql.matches) setSettingsOpen(false)
       if (!location.pathname.startsWith('/admin/vendors') && mql.matches) setVendorsOpen(false)
+      const inProductsRoute =
+        location.pathname.startsWith('/admin/categories') || location.pathname.startsWith('/products')
+      if (!inProductsRoute && mql.matches) setProductsOpen(false)
     }
     handle()
     mql.addEventListener('change', handle)
@@ -158,11 +186,11 @@ export function AdminLayout() {
     const links = adminMenu.filter(isLink)
     const settingsGroup = adminMenu.find((i) => 'children' in i && i.key === 'settings')
     const vendorsGroup = adminMenu.find((i) => 'children' in i && i.key === 'vendors')
+    const productsGroup = adminMenu.find((i) => 'children' in i && i.key === 'products')
 
     const mainKeys = new Set(['dashboard', 'users'])
     const managementLinkOrder = [
       'service_providers',
-      'products',
       'services',
       'orders',
       'delivery',
@@ -181,6 +209,7 @@ export function AdminLayout() {
       managementLinks,
       system,
       vendors: vendorsGroup && 'children' in vendorsGroup ? vendorsGroup : null,
+      products: productsGroup && 'children' in productsGroup ? productsGroup : null,
       settings: settingsGroup && 'children' in settingsGroup ? settingsGroup : null,
     }
   }, [])
@@ -409,6 +438,116 @@ export function AdminLayout() {
                                         child.key === 'vendors_delivery_drivers'
                                           ? location.pathname.startsWith('/admin/vendors/delivery-drivers')
                                           : location.pathname === child.to
+                                      return (
+                                        <motion.div key={child.key} whileHover={{ x: 3 }} transition={{ duration: 0.18 }}>
+                                          <NavLink
+                                            to={child.to}
+                                            onClick={() => isMobile && setMobileOpen(false)}
+                                            className={cn(
+                                              'group relative flex items-center gap-2 rounded-lg px-2.5 py-2 text-[13px] font-medium tracking-tight text-muted-foreground transition-colors',
+                                              'hover:bg-[#895129]/5 hover:text-[#895129]',
+                                              childActive &&
+                                                'bg-primary/10 text-[#895129] font-semibold shadow-[0_2px_8px_rgba(137,81,41,0.08)]',
+                                            )}
+                                          >
+                                            <span
+                                              className={cn(
+                                                childActive ? 'text-[#895129]' : 'text-muted-foreground group-hover:text-[#895129]',
+                                              )}
+                                            >
+                                              <ChildIcon className="h-3.5 w-3.5 shrink-0" />
+                                            </span>
+                                            <span>{child.label}</span>
+                                          </NavLink>
+                                        </motion.div>
+                                      )
+                                    })}
+                                  </div>
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+                          </>
+                        )
+                      })()}
+                    </div>
+                  )}
+
+                  {/* Products accordion */}
+                  {sectionedMenu.products && (
+                    <div className="space-y-1">
+                      {(() => {
+                        const item = sectionedMenu.products
+                        const Icon = item.icon
+                        const isActive =
+                          location.pathname.startsWith('/admin/categories') ||
+                          location.pathname.startsWith('/products')
+                        const open = productsOpen && (!collapsed || isMobile)
+                        return (
+                          <>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const next = !productsOpen
+                                setProductsOpen(next)
+                                localStorage.setItem(PRODUCTS_OPEN_KEY, next ? '1' : '0')
+                              }}
+                              className={cn(
+                                'group relative w-full flex items-center gap-3 rounded-xl border border-transparent px-3 py-2.5 text-sm font-medium tracking-tight text-muted-foreground transition-colors',
+                                'hover:bg-[#895129]/5 hover:text-[#895129]',
+                                isActive &&
+                                  'bg-primary/10 text-[#895129] border-[#895129]/20 shadow-[0_4px_12px_rgba(137,81,41,0.12)] font-semibold',
+                                collapsed && !isMobile && 'justify-center px-2',
+                              )}
+                              title={collapsed && !isMobile ? item.label : undefined}
+                              aria-expanded={open}
+                            >
+                              {isActive && (
+                                <motion.span
+                                  layoutId="sidebar-active-indicator-products"
+                                  className="absolute left-0 top-1/2 h-6 w-1 -translate-y-1/2 rounded-full bg-[#895129]"
+                                />
+                              )}
+                              <motion.span whileHover={{ x: 4, scale: 1.01 }} className="flex items-center gap-3">
+                                <span
+                                  className={cn(
+                                    isActive ? 'text-[#895129]' : 'text-muted-foreground group-hover:text-[#895129]',
+                                  )}
+                                >
+                                  <Icon className="h-4 w-4" />
+                                </span>
+                                {(!collapsed || isMobile) && (
+                                  <>
+                                    <span className="flex-1 text-left">{item.label}</span>
+                                    <ChevronDown
+                                      className={cn(
+                                        'h-4 w-4 transition-transform duration-200',
+                                        open && 'rotate-180',
+                                        isActive && 'text-[#895129]',
+                                      )}
+                                    />
+                                  </>
+                                )}
+                              </motion.span>
+                              <SidebarTooltip label={item.label} collapsed={collapsed && !isMobile} />
+                            </button>
+
+                            <AnimatePresence initial={false}>
+                              {open && (!collapsed || isMobile) && (
+                                <motion.div
+                                  initial={{ height: 0, opacity: 0 }}
+                                  animate={{ height: 'auto', opacity: 1 }}
+                                  exit={{ height: 0, opacity: 0 }}
+                                  transition={{ duration: 0.24, ease: [0.4, 0, 0.2, 1] }}
+                                  className="overflow-hidden"
+                                >
+                                  <div className="ml-2 space-y-0.5 border-l-2 border-[#895129]/15 pl-2 py-0.5">
+                                    {item.children.map((child) => {
+                                      const ChildIcon = child.icon
+                                      const childActive =
+                                        child.to === '/admin/categories'
+                                          ? location.pathname.startsWith('/admin/categories')
+                                          : location.pathname === child.to ||
+                                            location.pathname.startsWith(`${child.to}/`)
                                       return (
                                         <motion.div key={child.key} whileHover={{ x: 3 }} transition={{ duration: 0.18 }}>
                                           <NavLink

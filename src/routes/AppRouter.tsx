@@ -8,6 +8,8 @@ const DashboardPage = lazy(() => import('@/features/dashboard/pages/DashboardPag
 const UsersPage = lazy(() => import('@/features/users/pages/UsersPage'))
 const VendorsPage = lazy(() => import('@/features/vendors/pages/VendorsPage'))
 const ProductsPage = lazy(() => import('@/features/catalog/pages/ProductsPage'))
+const AddProductPage = lazy(() => import('@/features/catalog/pages/AddProductPage'))
+const CategoriesPage = lazy(() => import('@/features/catalog/pages/CategoriesPage'))
 const ServicesPage = lazy(() => import('@/features/catalog/pages/ServicesPage'))
 const OrdersPage = lazy(() => import('@/features/orders/pages/OrdersPage'))
 const DeliveryPage = lazy(() => import('@/features/delivery/pages/DeliveryPage'))
@@ -59,7 +61,9 @@ const router = createBrowserRouter([
       { path: '/admin/delivery-drivers/:id', element: <LegacyDeliveryDriverDetailRedirect /> },
       { path: '/admin/service-providers', element: <ServiceProvidersPage /> },
       { path: '/admin/service-providers/:id', element: <ServiceProviderDetailsPage /> },
+      { path: '/admin/categories', element: <CategoriesPage /> },
       { path: '/products', element: <ProductsPage /> },
+      { path: '/products/add', element: <AddProductPage /> },
       { path: '/services', element: <ServicesPage /> },
       { path: '/orders', element: <OrdersPage /> },
       { path: '/delivery', element: <DeliveryPage /> },

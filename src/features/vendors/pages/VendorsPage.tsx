@@ -24,6 +24,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import { VendorStatsCards } from '@/features/vendors/components/VendorStatsCards'
 
 function Money({ value }: { value: number }) {
   return (
@@ -289,31 +290,7 @@ export default function VendorsPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.25 }}
       >
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
-          {[
-            { label: 'Total Vendors', value: counts.total },
-            { label: 'Pending Approvals', value: counts.pending },
-            { label: 'Active Vendors', value: counts.active },
-            { label: 'Blocked Vendors', value: counts.blocked },
-          ].map((s, idx) => (
-            <motion.div
-              key={s.label}
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.35, delay: idx * 0.05 }}
-              whileHover={{ y: -4 }}
-            >
-              <Card className="transition-shadow hover:shadow-lg">
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm text-muted-foreground">{s.label}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-semibold text-foreground">{s.value}</div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
-        </div>
+        <VendorStatsCards counts={counts} />
 
         <Card className="mt-4">
           <CardHeader className="flex-row items-center justify-between">
@@ -456,7 +433,9 @@ export default function VendorsPage() {
                   <TableHead>Total Orders</TableHead>
                   <TableHead>Earnings</TableHead>
                   <TableHead>Joined Date</TableHead>
-                  <TableHead className="min-w-[160px] pr-6 text-right">Actions</TableHead>
+                  <TableHead className="min-w-[240px] w-[18%] pr-6 text-right whitespace-nowrap">
+                    Actions
+                  </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -500,15 +479,19 @@ export default function VendorsPage() {
                         <Money value={v.earnings} />
                       </TableCell>
                       <TableCell className="text-muted-foreground">{v.joinedAt}</TableCell>
-                      <TableCell className="min-w-[160px] pr-6 text-right">
-                        <div className="flex flex-wrap items-center justify-end gap-3">
-                          <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+                      <TableCell className="min-w-[240px] w-[18%] align-middle py-4 pr-6">
+                        <div className="flex flex-nowrap items-center justify-end gap-2 whitespace-nowrap">
+                          <motion.div
+                            className="inline-flex shrink-0 items-center justify-center leading-none"
+                            whileHover={{ scale: 1.03 }}
+                            whileTap={{ scale: 0.97 }}
+                          >
                             <Button
                               variant="outline"
                               size="icon"
-                              className="h-10 w-10 rounded-xl border border-[#89512925] bg-white hover:border-[#89512940] hover:bg-[#faf7f3]"
+                              className="box-border h-9 w-9 min-h-9 min-w-9 shrink-0 rounded-lg border border-[#89512925] bg-white p-0 hover:border-[#89512940] hover:bg-[#faf7f3]"
                               onClick={() => setSelected(v)}
-                              aria-label="View"
+                              aria-label="View vendor"
                             >
                               <Eye className="h-4 w-4" />
                             </Button>
@@ -516,19 +499,30 @@ export default function VendorsPage() {
 
                           {v.status === 'pending' ? (
                             <>
-                              <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+                              <motion.div
+                                className="inline-flex shrink-0 items-center leading-none"
+                                whileHover={{ scale: 1.03 }}
+                                whileTap={{ scale: 0.97 }}
+                              >
                                 <Button
+                                  type="button"
                                   size="sm"
-                                  className="bg-emerald-600 text-white hover:bg-emerald-600/90"
+                                  className="h-9 shrink-0 rounded-lg px-3.5 text-sm leading-none whitespace-nowrap bg-emerald-600 text-white hover:bg-emerald-600/90"
                                   onClick={() => requestAction(v, 'approve')}
                                 >
                                   Approve
                                 </Button>
                               </motion.div>
-                              <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+                              <motion.div
+                                className="inline-flex shrink-0 items-center leading-none"
+                                whileHover={{ scale: 1.03 }}
+                                whileTap={{ scale: 0.97 }}
+                              >
                                 <Button
+                                  type="button"
                                   size="sm"
                                   variant="destructive"
+                                  className="h-9 shrink-0 rounded-lg px-3.5 text-sm leading-none whitespace-nowrap"
                                   onClick={() => requestAction(v, 'reject')}
                                 >
                                   Reject
@@ -536,20 +530,30 @@ export default function VendorsPage() {
                               </motion.div>
                             </>
                           ) : v.status === 'active' ? (
-                            <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+                            <motion.div
+                              className="inline-flex shrink-0 items-center leading-none"
+                              whileHover={{ scale: 1.03 }}
+                              whileTap={{ scale: 0.97 }}
+                            >
                               <Button
+                                type="button"
                                 size="sm"
-                                className="h-10 rounded-xl border border-red-200 bg-[#fff1f1] px-4 text-sm font-medium text-red-600 hover:bg-[#ffe6e6]"
+                                className="h-9 shrink-0 rounded-lg border border-red-200 bg-[#fff1f1] px-3.5 text-sm font-medium leading-none whitespace-nowrap text-red-600 hover:bg-[#ffe6e6]"
                                 onClick={() => requestAction(v, 'block')}
                               >
                                 Block
                               </Button>
                             </motion.div>
                           ) : (
-                            <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+                            <motion.div
+                              className="inline-flex shrink-0 items-center leading-none"
+                              whileHover={{ scale: 1.03 }}
+                              whileTap={{ scale: 0.97 }}
+                            >
                               <Button
+                                type="button"
                                 size="sm"
-                                className="h-10 rounded-xl border border-green-200 bg-[#eefbf3] px-4 text-sm font-medium text-green-700 hover:bg-[#e2f6ea]"
+                                className="h-9 shrink-0 rounded-lg border border-green-200 bg-[#eefbf3] px-3.5 text-sm font-medium leading-none whitespace-nowrap text-green-700 hover:bg-[#e2f6ea]"
                                 onClick={() => requestAction(v, 'unblock')}
                               >
                                 Unblock
